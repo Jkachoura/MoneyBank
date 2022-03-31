@@ -109,7 +109,7 @@ class ATM extends Thread {
     }
 
     private void balance(String UID) {
-        agui.yourBalance.setText("Your balance is: " + checkBalance(UID));
+        agui.yourBalance.setText("Your balance is: €" + checkBalance(UID));
         agui.displayPanel("BalancePanel");
         agui.BalancePanel.add(agui.logoIcon);
         try {
