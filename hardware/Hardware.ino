@@ -17,6 +17,7 @@ Adafruit_Thermal printer(&mySerial);
 
 int wantsReceipt;
 String dateTime = "";
+String IBAN = "";
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -54,6 +55,7 @@ void loop()
   }
   int dataLength = allDataIn.length();
   dateTime = allDataIn.substring(0, 15);
+  IBAN = allDataIn.substring(15,19);
   wantsReceipt = (int)allDataIn.substring(dataLength - 1, dataLength).toInt();
 
   if (wantsReceipt == 1) {
@@ -118,7 +120,7 @@ void printReceipt() {
 
   printer.println(("- - - - - - - - - - - - - - - -"));   // LINE
 
-  printer.println(addSpaces("IBAN :", "XXXX XXXX XXXX 69"));  // IBAN Number shows only last 2
+  printer.println(addSpaces("IBAN :", "XXXX XXXX " + IBAN));  // IBAN Number shows only last 4
   printer.println(addSpaces("Amount :", "20 EUR"));  // Amount printed
   printer.println(addSpaces("Transaction# :", "14260"));   // transaction ID
 
