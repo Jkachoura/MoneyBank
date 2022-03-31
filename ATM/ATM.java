@@ -48,7 +48,6 @@ class ATM extends Thread {
                 sCon.clearInput();
             }
         }
-//        System.out.println(UIDfull);
 
         // Check if card isn't blocked
         if (checkCardBlockStatus(UIDfull)) {
@@ -118,11 +117,10 @@ class ATM extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        receipt();
-//        ScanCard();
+        receipt(UID);
     }
 
-    private void receipt() {
+    private void receipt(String UID) {
         agui.displayPanel("receiptPanel");
         agui.receiptPanel.add(agui.logoIcon);
         while (true) {
@@ -134,7 +132,7 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If D is pressed print out a receipt and dispense the money
                     case "D":
-                        sCon.giveOutput(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mmdd/MM/yyyy")) + "1");
+                        sCon.giveOutput(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mmdd/MM/yyyy")) + getIBAN(UID).substring(14,18) + "1");
                         Thanks();
                         break;
                     //If * is pressed don't print out a receipt and dispense the money
@@ -249,5 +247,27 @@ class ATM extends Thread {
             System.out.println(e);
         }
         return balance;
+    }
+
+    private String getIBAN(String UID) {
+        String IBAN = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/moneybank", "root", "MNBK22");
+            Statement stmt = con.createStatement();
+
+            ResultSet rs = stmt.executeQuery("SELECT IBAN FROM accounts\n" +
+                    "JOIN cards ON cards.CardID = accounts.CardID\n" +
+                    "WHERE cards.uid = " + "'" + UID + "'");
+            while (rs.next()) {
+                IBAN = rs.getString(1);
+            }
+            con.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return IBAN;
     }
 }
