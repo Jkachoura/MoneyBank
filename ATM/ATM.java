@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.time.*;
+import java.time.format.*;
 
 class ATM extends Thread {
     private String keypadInput;
@@ -46,6 +48,7 @@ class ATM extends Thread {
                 sCon.clearInput();
             }
         }
+//        System.out.println(UIDfull);
 
         // Check if card isn't blocked
         if (checkCardBlockStatus(UIDfull)) {
@@ -128,13 +131,10 @@ class ATM extends Thread {
             //Get keypad input
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
-                System.out.print(keypadInput);
-            }
-            if (keypadInput != null) {
                 switch (keypadInput) {
                     //If D is pressed print out a receipt and dispense the money
                     case "D":
-                        sCon.giveOutput("1");
+                        sCon.giveOutput(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mmdd/MM/yyyy")) + "1");
                         Thanks();
                         break;
                     //If * is pressed don't print out a receipt and dispense the money
