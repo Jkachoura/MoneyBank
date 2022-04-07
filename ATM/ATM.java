@@ -107,6 +107,34 @@ class ATM extends Thread {
             }
         }
     }
+    
+    private void menu(){
+        agui.displayPanel("menuPanel");
+        agui.menuPanel.add(agui.logoIcon);
+        while (true) {
+            //Set up the variables and get the transactionID from the database
+            Thread.yield();
+            //Get keypad input
+            keypadInput = keypad.getInput();
+            if (keypadInput != null) {
+                switch (keypadInput) {
+                    //If D is pressed print out a receipt and dispense the money
+                    case "B":
+                        //TODO naar balance screen
+                        break;
+                    //If * is pressed don't print out a receipt and dispense the money
+                    case "*":
+                        Thanks();
+                        break;
+                    case "C":
+                    //TODO naar withdraw screen
+                        break;
+                    
+                }
+            }
+        }
+        
+    }
 
     private void balance(String UID) {
         agui.yourBalance.setText("Your balance is: €" + checkBalance(UID));
