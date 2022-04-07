@@ -17,9 +17,11 @@ public class ATMGUI extends JFrame {
     public JLabel enterPin = new JLabel("Enter your pincode");
     public JLabel pinMessage = new JLabel("");
 
+    //Menu screen
+    public JPanel menuPanel;
     //Balance screen
     public JPanel BalancePanel;
-    public JLabel yourBalance = new JLabel("Your Baalance is ");
+    public JLabel yourBalance = new JLabel("Your Balance is ");
 
     //Receipt screen
     public JPanel receiptPanel;
@@ -42,7 +44,7 @@ public class ATMGUI extends JFrame {
     public ATMGUI() {
         setContentPane(screenPanel);
         setResizable(false);
-        setAlwaysOnTop(true);
+        setAlwaysOnTop(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1382, 864);
         setUndecorated(true);
@@ -113,6 +115,78 @@ public class ATMGUI extends JFrame {
         logoIcon.setVerticalAlignment(JLabel.TOP);
         logoIcon.setBounds(0, 0, 1382, 864);
         PincodePanel.add(logoIcon);
+
+        //Menu screen
+        menuPanel = new JPanel();
+        menuPanel.setLayout(null);
+        menuPanel.setBackground(Color.decode("#15202B"));
+        Windows.add(menuPanel, "menuPanel");
+
+        JLabel label_21 = new JLabel("B", SwingConstants.CENTER);
+        label_21.setOpaque(true);
+        label_21.setForeground(Color.decode("#FFFFFF"));
+        label_21.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        label_21.setBackground(Color.decode("#22303C"));
+        label_21.setBounds(741, 462, 50, 75);
+        menuPanel.add(label_21);
+
+        JLabel label_26 = new JLabel("C", SwingConstants.CENTER);
+        label_26.setVerticalAlignment(SwingConstants.BOTTOM);
+        label_26.setOpaque(true);
+        label_26.setForeground(Color.decode("#FFFFFF"));
+        label_26.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        label_26.setBackground(Color.decode("#22303C"));
+        label_26.setBounds(741, 357, 50, 75);
+        menuPanel.add(label_26);
+
+        JButton btnBalance = new JButton("Balance");
+        btnBalance.setForeground(Color.WHITE);
+        btnBalance.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnBalance.setFocusPainted(false);
+        btnBalance.setBackground(Color.decode("#22303C"));
+        btnBalance.setBounds(591, 462, 150, 75);
+        menuPanel.add(btnBalance);
+
+        JButton btnWithdraw = new JButton("Withdraw");
+        btnWithdraw.setForeground(Color.WHITE);
+        btnWithdraw.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnWithdraw.setFocusPainted(false);
+        btnWithdraw.setBackground(Color.decode("#22303C"));
+        btnWithdraw.setBounds(591, 357, 150, 75);
+        menuPanel.add(btnWithdraw);
+
+        // JLabel label_20 = new JLabel("D", SwingConstants.CENTER);
+        // label_20.setOpaque(true);
+        // label_20.setForeground(Color.decode("#FFFFFF"));
+        // label_20.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        // label_20.setBackground(Color.decode("#22303C"));
+        // label_20.setBounds(1250, 700, 50, 75);
+        // menuPanel.add(label_20);
+
+        JLabel label_25 = new JLabel("*", SwingConstants.CENTER);
+        label_25.setVerticalAlignment(SwingConstants.BOTTOM);
+        label_25.setOpaque(true);
+        label_25.setForeground(Color.decode("#FFFFFF"));
+        label_25.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        label_25.setBackground(Color.decode("#22303C"));
+        label_25.setBounds(75, 700, 50, 75);
+        menuPanel.add(label_25);
+
+        // JButton btnBack = new JButton("Back");
+        // btnBack.setForeground(Color.WHITE);
+        // btnBack.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        // btnBack.setFocusPainted(false);
+        // btnBack.setBackground(Color.decode("#018786"));
+        // btnBack.setBounds(1100, 700, 150, 75);
+        // menuPanel.add(btnBack);
+
+        JButton btnAbort = new JButton("Abort");
+        btnAbort.setForeground(Color.WHITE);
+        btnAbort.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnAbort.setFocusPainted(false);
+        btnAbort.setBackground(Color.decode("#B00020"));
+        btnAbort.setBounds(125, 700, 150, 75);
+        menuPanel.add(btnAbort);
 
 
         //Balance screen
@@ -222,3 +296,4 @@ public class ATMGUI extends JFrame {
         screenPanel.repaint();
     }
 }
+
