@@ -270,4 +270,56 @@ class ATM extends Thread {
         }
         return IBAN;
     }
+
+    private boolean checkIfDebt(String UID) {
+        String balance = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/moneybank", "root", "MNBK22");
+            Statement stmt = con.createStatement();
+
+            ResultSet rs = stmt.executeQuery("SELECT Balance FROM accounts\n" +
+                    "JOIN cards ON cards.CardID = accounts.CardID\n" +
+                    "WHERE cards.uid = " + "'" + UID + "'");
+            while (rs.next()) {
+                balance = rs.getString(1);
+            }
+            con.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        if (Integer.parseInt(balance) < 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean checkSufficientBalance(String UID, int withdrawAmount) {
+        String balance = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/moneybank", "root", "MNBK22");
+            Statement stmt = con.createStatement();
+
+            ResultSet rs = stmt.executeQuery("SELECT Balance FROM accounts\n" +
+                    "JOIN cards ON cards.CardID = accounts.CardID\n" +
+                    "WHERE cards.uid = " + "'" + UID + "'");
+            while (rs.next()) {
+                balance = rs.getString(1);
+            }
+            con.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        if (Integer.parseInt(balance) >= withdrawAmount) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
