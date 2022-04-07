@@ -87,7 +87,7 @@ class ATM extends Thread {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        balance(UID);
+                        menu(UID);
                     } else if (attempts != 2) {
                         agui.enterPin.setText("Wrong pincode. Try again");
                         attempts++;
@@ -107,8 +107,8 @@ class ATM extends Thread {
             }
         }
     }
-    
-    private void menu(){
+
+    private void menu(String UID){
         agui.displayPanel("menuPanel");
         agui.menuPanel.add(agui.logoIcon);
         while (true) {
@@ -120,20 +120,20 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If D is pressed print out a receipt and dispense the money
                     case "B":
-                        //TODO naar balance screen
+                        balance(UID);
                         break;
                     //If * is pressed don't print out a receipt and dispense the money
                     case "*":
                         Thanks();
                         break;
                     case "C":
-                    //TODO naar withdraw screen
+                        //TODO naar withdraw screen
                         break;
-                    
+
                 }
             }
         }
-        
+
     }
 
     private void balance(String UID) {
