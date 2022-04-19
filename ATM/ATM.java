@@ -15,6 +15,8 @@ class ATM extends Thread {
     private String pincode;
     private int attempts;
 
+    private String pinAmount;
+
     public ATM() {
         sCon = new SerialConnection();
         agui = new ATMGUI();
@@ -118,16 +120,16 @@ class ATM extends Thread {
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                    //If D is pressed print out a receipt and dispense the money
+                    //If D is pressed
                     case "B":
                         balance(UID);
                         break;
-                    //If * is pressed don't print out a receipt and dispense the money
+                    //If * is pressed
                     case "*":
                         Thanks();
                         break;
                     case "C":
-                        //TODO naar withdraw screen
+                        withdraw(UID);
                         break;
 
                 }
@@ -146,6 +148,43 @@ class ATM extends Thread {
             e.printStackTrace();
         }
         receipt(UID);
+    }
+
+    private void withdraw(String UID) {
+        agui.displayPanel("withdrawPanel");
+        agui.withdrawPanel.add(agui.logoIcon);
+
+        while (true) {
+            Thread.yield();
+
+            keypadInput = keypad.getInput();
+            if (keypadInput != null) {
+                if (!keypadInput.equals("A") && !keypadInput.equals("B") && !keypadInput.equals("C") && !keypadInput.equals("D") && !keypadInput.equals("*") && !keypadInput.equals("#")) {
+                    agui.withdrawMessage.setText("Withdraw amount: " + keypadInput);
+                    pinAmount = keypadInput;
+                    while (true) {
+                        keypadInput = keypad.getInput();
+                        if (keypadInput != null) {
+                            if (keypadInput.equals("D")) {
+                                break;
+                            }
+                            pinAmount = pinAmount + keypadInput;
+                            agui.withdrawMessage.setText("Withdraw amount: " + pinAmount);
+                        }
+                    }
+                }
+                if (checkIfDebt(UID)) {
+                    debtError();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    menu(UID);
+                }
+                agui.withdrawMessage.setText("Printing €" + pinAmount);
+            }
+        }
     }
 
     private void receipt(String UID) {
@@ -193,6 +232,16 @@ class ATM extends Thread {
             e.printStackTrace();
         }
         ScanCard();
+    }
+
+    private void debtError() {
+        agui.displayPanel("debtErrorPanel");
+        agui.blockedCardPanel.add(agui.logoIcon);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private String getPincodeDatabase(String UID) {
