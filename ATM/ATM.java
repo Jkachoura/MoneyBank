@@ -110,7 +110,7 @@ class ATM extends Thread {
         }
     }
 
-    private void menu(String UID){
+    private void menu(String UID) {
         agui.displayPanel("menuPanel");
         agui.menuPanel.add(agui.logoIcon);
         while (true) {
@@ -129,7 +129,7 @@ class ATM extends Thread {
                         Thanks();
                         break;
                     case "C":
-                        withdraw(UID);
+                        withdrawCustomAmount(UID);
                         break;
 
                 }
@@ -142,53 +142,55 @@ class ATM extends Thread {
         agui.yourBalance.setText("Your balance is: €" + checkBalance(UID));
         agui.displayPanel("BalancePanel");
         agui.BalancePanel.add(agui.logoIcon);
-        while(true){
+        while (true) {
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                //If * is pressed don't print out a receipt and dispense the money
+                    //If * is pressed don't print out a receipt and dispense the money
                     case "*":
                         menu(UID);
-                    break;
+                        break;
                 }
             }
         }
     }
 
-    private void withdraw(String UID) {
+    private void withdrawCustomAmount(String UID) {
         agui.displayPanel("withdrawPanel");
         agui.withdrawPanel.add(agui.logoIcon);
+        agui.withdrawAmountCustom.setText("");
 
-        while (true) {
-            Thread.yield();
-
-            keypadInput = keypad.getInput();
-            if (keypadInput != null) {
-                if (!keypadInput.equals("A") && !keypadInput.equals("B") && !keypadInput.equals("C") && !keypadInput.equals("D") && !keypadInput.equals("*") && !keypadInput.equals("#")) {
-                    agui.withdrawMessage.setText("Withdraw amount: " + keypadInput);
-                    pinAmount = keypadInput;
-                    while (true) {
-                        keypadInput = keypad.getInput();
-                        if (keypadInput != null) {
-                            if (keypadInput.equals("D")) {
-                                break;
-                            }
-                            pinAmount = pinAmount + keypadInput;
-                            agui.withdrawMessage.setText("Withdraw amount: " + pinAmount);
-                        }
-                    }
-                }
-                if (checkIfDebt(UID)) {
-                    debtError();
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    menu(UID);
-                }
-                agui.withdrawMessage.setText("Printing €" + pinAmount);
+        if (checkIfDebt(UID)) {
+            debtError();
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            menu(UID);
+        } else {
+            Thread.yield();
+            pinAmount = null;
+            while (true) {
+                keypadInput = keypad.getInput();
+                if (keypadInput != null) {
+                    if (!keypadInput.equals("A") && !keypadInput.equals("B") && !keypadInput.equals("C") && !keypadInput.equals("D") && !keypadInput.equals("*") && !keypadInput.equals("#")) {
+                        if (pinAmount == null) {
+                            pinAmount = keypadInput;
+                            agui.withdrawAmountCustom.setText("€" + pinAmount);
+                        } else {
+                            pinAmount = pinAmount + keypadInput;
+                            agui.withdrawAmountCustom.setText(agui.withdrawAmountCustom.getText() + keypadInput);
+                        }
+                    } else if (keypadInput.equals("D")) {
+                        break;
+                    } else if (keypadInput.equals("*")) {
+                        menu(UID);
+                    }
+                }
+            }
+            // TO DO print functie
+            receipt(UID);
         }
     }
 
@@ -204,7 +206,7 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If D is pressed print out a receipt and dispense the money
                     case "D":
-                        sCon.giveOutput(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mmdd/MM/yyyy")) + getIBAN(UID).substring(14,18) + "1");
+                        sCon.giveOutput(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mmdd/MM/yyyy")) + getIBAN(UID).substring(14, 18) + "1");
                         Thanks();
                         break;
                     //If * is pressed don't print out a receipt and dispense the money
