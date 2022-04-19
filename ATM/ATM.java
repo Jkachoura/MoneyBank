@@ -142,12 +142,17 @@ class ATM extends Thread {
         agui.yourBalance.setText("Your balance is: €" + checkBalance(UID));
         agui.displayPanel("BalancePanel");
         agui.BalancePanel.add(agui.logoIcon);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        while(true){
+            keypadInput = keypad.getInput();
+            if (keypadInput != null) {
+                switch (keypadInput) {
+                //If * is pressed don't print out a receipt and dispense the money
+                    case "*":
+                        menu(UID);
+                    break;
+                }
+            }
         }
-        receipt(UID);
     }
 
     private void withdraw(String UID) {
