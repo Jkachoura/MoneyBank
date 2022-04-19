@@ -173,18 +173,45 @@ void checkAantal(String geldData){
   int hoeveelheid10 = geldData.substring(0, 1).toInt();
   int hoeveelheid50 = geldData.substring(1, 2).toInt();
 
+  boolean conditie10 = totaal10 >= hoeveelheid10;
+  boolean conditie50 = totaal50 >= hoeveelheid50;
+
   Serial.print("G");
-  if(totaal10 >= hoeveelheid10){
+  if(conditie10){
     Serial.print("1");
   }
-  else if(totaal10 < hoeveelheid10){
+  else if(!conditie10){
     Serial.print("0");
   }
-  else if(totaal50 >= hoeveelheid50){
+  if(conditie50){
     Serial.print("1");
   }
-  else if(totaal50 < hoeveelheid50){
+  else if(!conditie50){
     Serial.print("0");
   }
+  
   Serial.println("G");
+
+  if(conditie10 && conditie50){
+    draaiMBoven(hoeveelheid10);
+    draaiMBeneden(hoeveelheid50);
+  }
+}
+
+void draaiMBoven(int aantal){
+  analogWrite(mBoven, 200);
+  delay(aantal * draaiTijd);
+  analogWrite(mBoven, 0);
+  for(int i = 0; i < aantal; i++){
+    totaal10--;
+  }
+}
+
+void draaiMBeneden(int aantal){
+  analogWrite(mBeneden, 200);
+  delay(aantal * draaiTijd);
+  analogWrite(mBeneden, 0);
+  for(int i = 0; i < aantal; i++){
+    totaal50--;
+  }
 }
