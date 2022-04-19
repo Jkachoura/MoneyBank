@@ -210,6 +210,24 @@ public class ATMGUI extends JFrame {
         yourBalance.setForeground(Color.decode("#FFFFFF"));
         yourBalance.setBounds(0, 0, 1382, 864);
         BalancePanel.add(yourBalance);
+        
+        JLabel label_69 = new JLabel("*", SwingConstants.CENTER);
+        label_69.setVerticalAlignment(SwingConstants.BOTTOM);
+        label_69.setOpaque(true);
+        label_69.setForeground(Color.decode("#FFFFFF"));
+        label_69.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        label_69.setBackground(Color.decode("#22303C"));
+        label_69.setBounds(75, 700, 50, 75);
+        BalancePanel.add(label_69);
+
+        JButton btnBack2 = new JButton("Back");
+        btnBack2.setForeground(Color.WHITE);
+        btnBack2.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnBack2.setFocusPainted(false);
+        btnBack2.setBackground(Color.decode("#B00020"));
+        btnBack2.setBounds(125, 700, 150, 75);
+        BalancePanel.add(btnBack2);
+
 
         BalancePanel.add(logoIcon);
 
