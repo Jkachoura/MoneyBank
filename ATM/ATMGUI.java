@@ -12,13 +12,19 @@ public class ATMGUI extends JFrame {
     public JPanel scanCardPanel;
     private JLabel ScanCardTo = new JLabel("Scan your card to begin");
 
+    public JLabel Dlabelpin;
+    public JButton btnYespin;
+    public JLabel StarlabelPin;
+    public JButton btnDeletePin;
+
     //Pincode Screen
-    public JPanel PincodePanel;
+    public JPanel pincodePanel;
     public JLabel enterPin = new JLabel("Enter your pincode");
     public JLabel pinMessage = new JLabel("");
 
     //Menu screen
     public JPanel menuPanel;
+
     //Balance screen
     public JPanel BalancePanel;
     public JLabel yourBalance = new JLabel("Your Balance is ");
@@ -54,7 +60,7 @@ public class ATMGUI extends JFrame {
     public ATMGUI() {
         setContentPane(screenPanel);
         setResizable(false);
-        setAlwaysOnTop(true);
+        setAlwaysOnTop(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1382, 864);
         setUndecorated(true);
@@ -102,29 +108,62 @@ public class ATMGUI extends JFrame {
         scanCardPanel.add(logo);
 
         //Pincode screen
-        PincodePanel = new JPanel();
-        PincodePanel.setLayout(null);
-        PincodePanel.setBackground(Color.decode("#15202B"));
-        Windows.add(PincodePanel, "PincodePanel");
+        pincodePanel = new JPanel();
+        pincodePanel.setLayout(null);
+        pincodePanel.setBackground(Color.decode("#15202B"));
+        Windows.add(pincodePanel, "pincodePanel");
 
         enterPin.setHorizontalAlignment(JLabel.CENTER);
         enterPin.setVerticalAlignment(JLabel.CENTER);
         enterPin.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
         enterPin.setForeground(Color.decode("#FFFFFF"));
         enterPin.setBounds(0, 0, 1382, 864);
-        PincodePanel.add(enterPin);
+        pincodePanel.add(enterPin);
 
         pinMessage.setHorizontalAlignment(JLabel.CENTER);
         pinMessage.setVerticalAlignment(JLabel.CENTER);
         pinMessage.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
         pinMessage.setForeground(Color.decode("#8899A6"));
         pinMessage.setBounds(0, 200, 1382, 864);
-        PincodePanel.add(pinMessage);
+        pincodePanel.add(pinMessage);
+
+        Dlabelpin = new JLabel("D", SwingConstants.CENTER);
+        Dlabelpin.setOpaque(true);
+        Dlabelpin.setForeground(Color.decode("#FFFFFF"));
+        Dlabelpin.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        Dlabelpin.setBackground(Color.decode("#22303C"));
+        Dlabelpin.setBounds(1250, 700, 50, 75);
+        pincodePanel.add(Dlabelpin);
+
+        btnYespin = new JButton("Confirm");
+        btnYespin.setForeground(Color.WHITE);
+        btnYespin.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnYespin.setFocusPainted(false);
+        btnYespin.setBackground(Color.decode("#018786"));
+        btnYespin.setBounds(1100, 700, 150, 75);
+        pincodePanel.add(btnYespin);
+
+        StarlabelPin = new JLabel("*", SwingConstants.CENTER);
+        StarlabelPin.setVerticalAlignment(SwingConstants.BOTTOM);
+        StarlabelPin.setOpaque(true);
+        StarlabelPin.setForeground(Color.decode("#FFFFFF"));
+        StarlabelPin.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        StarlabelPin.setBackground(Color.decode("#22303C"));
+        StarlabelPin.setBounds(75, 700, 50, 75);
+        pincodePanel.add(StarlabelPin);
+
+         btnDeletePin = new JButton("Delete");
+        btnDeletePin.setForeground(Color.WHITE);
+        btnDeletePin.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnDeletePin.setFocusPainted(false);
+        btnDeletePin.setBackground(Color.decode("#B00020"));
+        btnDeletePin.setBounds(125, 700, 150, 75);
+        pincodePanel.add(btnDeletePin);
 
         logoIcon.setHorizontalAlignment(JLabel.CENTER);
         logoIcon.setVerticalAlignment(JLabel.TOP);
         logoIcon.setBounds(0, 0, 1382, 864);
-        PincodePanel.add(logoIcon);
+        pincodePanel.add(logoIcon);
 
         //Menu screen
         menuPanel = new JPanel();
