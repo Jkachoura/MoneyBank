@@ -1,3 +1,4 @@
+import java.rmi.server.UID;
 import java.sql.*;
 import java.time.*;
 import java.time.format.*;
@@ -24,10 +25,10 @@ class ATM extends Thread {
     }
 
     public void run() {
-        ScanCard();
+        scanCard();
     }
 
-    private void ScanCard() {
+    private void scanCard() {
         agui.displayPanel("scanCardPanel");
         agui.scanCardPanel.add(agui.logoIcon);
 
@@ -60,28 +61,46 @@ class ATM extends Thread {
 
     private void enterPincode(String correctPin, String UID) {
         agui.enterPin.setText("Enter your pincode");
-        agui.PincodePanel.add(agui.logoIcon);
+        agui.pincodePanel.add(agui.logoIcon);
         agui.pinMessage.setText("");
-        agui.displayPanel("PincodePanel");
+        agui.displayPanel("pincodePanel");
+
+        agui.Dlabelpin.setVisible(true);
+        agui.btnYespin.setVisible(true);
+        agui.StarlabelPin.setVisible(true);
+        agui.btnDeletePin.setVisible(true);
+
         attempts = 0;
         while (true) {
             Thread.yield();
-
+            // TO DO remove input en confirm buttons
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 if (!keypadInput.equals("*") && !keypadInput.equals("#")) {
                     agui.pinMessage.setText("");
                     pincode = keypadInput;
                     agui.pinMessage.setText("*");
-                    while (pincode.length() < 4) {
+                    while (true) {
                         keypadInput = keypad.getInput();
                         if (keypadInput != null) {
-                            pincode = pincode + keypadInput;
-                            agui.pinMessage.setText(agui.pinMessage.getText() + "*");
+                            if (keypadInput.equals("D")) {
+                                break;
+                            } else if (keypadInput.equals("*") && pincode.length() != 0) {
+                                pincode = pincode.substring(0, pincode.length() - 1);
+                                agui.pinMessage.setText(agui.pinMessage.getText().substring(0, agui.pinMessage.getText().length() - 1));
+                            } else if (!keypadInput.equals("A") && !keypadInput.equals("B") && !keypadInput.equals("C") && !keypadInput.equals("D") && !keypadInput.equals("*") && !keypadInput.equals("#")){
+                                pincode = pincode + keypadInput;
+                                agui.pinMessage.setText(agui.pinMessage.getText() + "*");
+                            }
                         }
                     }
 
                     if (pincode.equals(correctPin)) {
+                        agui.Dlabelpin.setVisible(false);
+                        agui.btnYespin.setVisible(false);
+                        agui.StarlabelPin.setVisible(false);
+                        agui.btnDeletePin.setVisible(false);
+
                         agui.enterPin.setText("Welcome to Money Bank!");
                         agui.pinMessage.setText(" ");
                         try {
@@ -103,7 +122,7 @@ class ATM extends Thread {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        ScanCard();
+                        scanCard();
                     }
                 }
             }
@@ -135,7 +154,6 @@ class ATM extends Thread {
                 }
             }
         }
-
     }
 
     private void balance(String UID) {
@@ -227,7 +245,7 @@ class ATM extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ScanCard();
+        scanCard();
     }
 
     private void blockedCard() {
@@ -238,7 +256,7 @@ class ATM extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ScanCard();
+        scanCard();
     }
 
     private void debtError() {
