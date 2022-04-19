@@ -25,7 +25,8 @@ public class ATMGUI extends JFrame {
 
     //Withdraw screen
     public JPanel withdrawPanel;
-    public JLabel withdrawMessage = new JLabel("Withdraw amount: ");
+    public JLabel withdrawMessage = new JLabel("Enter withdraw amount: ");
+    public JLabel withdrawAmountCustom = new JLabel("");
 
     //Receipt screen
     public JPanel receiptPanel;
@@ -53,7 +54,7 @@ public class ATMGUI extends JFrame {
     public ATMGUI() {
         setContentPane(screenPanel);
         setResizable(false);
-        setAlwaysOnTop(false);
+        setAlwaysOnTop(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1382, 864);
         setUndecorated(true);
@@ -210,7 +211,7 @@ public class ATMGUI extends JFrame {
         yourBalance.setForeground(Color.decode("#FFFFFF"));
         yourBalance.setBounds(0, 0, 1382, 864);
         BalancePanel.add(yourBalance);
-        
+
         JLabel label_69 = new JLabel("*", SwingConstants.CENTER);
         label_69.setVerticalAlignment(SwingConstants.BOTTOM);
         label_69.setOpaque(true);
@@ -244,6 +245,13 @@ public class ATMGUI extends JFrame {
         withdrawMessage.setBounds(0, 0, 1382, 864);
         withdrawPanel.add(withdrawMessage);
 
+        withdrawAmountCustom.setHorizontalAlignment(JLabel.CENTER);
+        withdrawAmountCustom.setVerticalAlignment(JLabel.CENTER);
+        withdrawAmountCustom.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
+        withdrawAmountCustom.setForeground(Color.decode("#FFFFFF"));
+        withdrawAmountCustom.setBounds(0, 200, 1382, 864);
+        withdrawPanel.add(withdrawAmountCustom);
+
         JLabel Dlabel2 = new JLabel("D", SwingConstants.CENTER);
         Dlabel2.setOpaque(true);
         Dlabel2.setForeground(Color.decode("#FFFFFF"));
@@ -259,7 +267,7 @@ public class ATMGUI extends JFrame {
         btnYes2.setBackground(Color.decode("#018786"));
         btnYes2.setBounds(1100, 700, 150, 75);
         withdrawPanel.add(btnYes2);
-        
+
         JLabel label_70 = new JLabel("*", SwingConstants.CENTER);
         label_70.setVerticalAlignment(SwingConstants.BOTTOM);
         label_70.setOpaque(true);
