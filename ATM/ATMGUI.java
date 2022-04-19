@@ -259,6 +259,23 @@ public class ATMGUI extends JFrame {
         btnYes2.setBackground(Color.decode("#018786"));
         btnYes2.setBounds(1100, 700, 150, 75);
         withdrawPanel.add(btnYes2);
+        
+        JLabel label_70 = new JLabel("*", SwingConstants.CENTER);
+        label_70.setVerticalAlignment(SwingConstants.BOTTOM);
+        label_70.setOpaque(true);
+        label_70.setForeground(Color.decode("#FFFFFF"));
+        label_70.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        label_70.setBackground(Color.decode("#22303C"));
+        label_70.setBounds(75, 700, 50, 75);
+        withdrawPanel.add(label_70);
+
+        JButton btnBack3 = new JButton("Back");
+        btnBack3.setForeground(Color.WHITE);
+        btnBack3.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnBack3.setFocusPainted(false);
+        btnBack3.setBackground(Color.decode("#B00020"));
+        btnBack3.setBounds(125, 700, 150, 75);
+        withdrawPanel.add(btnBack3);
 
         withdrawPanel.add(logoIcon);
 
