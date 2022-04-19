@@ -23,6 +23,10 @@ public class ATMGUI extends JFrame {
     public JPanel BalancePanel;
     public JLabel yourBalance = new JLabel("Your Balance is ");
 
+    //Withdraw screen
+    public JPanel withdrawPanel;
+    public JLabel withdrawMessage = new JLabel("Withdraw amount: ");
+
     //Receipt screen
     public JPanel receiptPanel;
 
@@ -34,6 +38,11 @@ public class ATMGUI extends JFrame {
     //Blocked card screen
     public JPanel blockedCardPanel;
     private JLabel thisCardBlocked = new JLabel("This card is blocked");
+
+    //Debt error screen
+    public JPanel debtErrorPanel;
+    private JLabel debtErrorMessage = new JLabel("Account is in debt.");
+    private JLabel debtErrorMessage2 = new JLabel("Unable to withdraw money.");
 
     // logo test
     private ImageIcon logoImage;
@@ -204,6 +213,37 @@ public class ATMGUI extends JFrame {
 
         BalancePanel.add(logoIcon);
 
+        //Withdraw screen
+        withdrawPanel = new JPanel();
+        withdrawPanel.setLayout(null);
+        withdrawPanel.setBackground(Color.decode("#15202B"));
+        Windows.add(withdrawPanel, "withdrawPanel");
+
+        withdrawMessage.setHorizontalAlignment(JLabel.CENTER);
+        withdrawMessage.setVerticalAlignment(JLabel.CENTER);
+        withdrawMessage.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
+        withdrawMessage.setForeground(Color.decode("#FFFFFF"));
+        withdrawMessage.setBounds(0, 0, 1382, 864);
+        withdrawPanel.add(withdrawMessage);
+
+        JLabel Dlabel2 = new JLabel("D", SwingConstants.CENTER);
+        Dlabel2.setOpaque(true);
+        Dlabel2.setForeground(Color.decode("#FFFFFF"));
+        Dlabel2.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        Dlabel2.setBackground(Color.decode("#22303C"));
+        Dlabel2.setBounds(1250, 700, 50, 75);
+        withdrawPanel.add(Dlabel2);
+
+        JButton btnYes2 = new JButton("Confirm");
+        btnYes2.setForeground(Color.WHITE);
+        btnYes2.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnYes2.setFocusPainted(false);
+        btnYes2.setBackground(Color.decode("#018786"));
+        btnYes2.setBounds(1100, 700, 150, 75);
+        withdrawPanel.add(btnYes2);
+
+        withdrawPanel.add(logoIcon);
+
 
         //Receipt
         receiptPanel = new JPanel();
@@ -288,6 +328,26 @@ public class ATMGUI extends JFrame {
 
         blockedCardPanel.add(logoIcon);
 
+        //Debt Error screen
+        debtErrorPanel = new JPanel();
+        debtErrorPanel.setLayout(null);
+        debtErrorPanel.setBackground(Color.decode("#15202B"));
+        Windows.add(debtErrorPanel, "debtErrorPanel");
+
+        debtErrorMessage.setHorizontalAlignment(JLabel.CENTER);
+        debtErrorMessage.setVerticalAlignment(JLabel.CENTER);
+        debtErrorMessage.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
+        debtErrorMessage.setForeground(Color.decode("#FFFFFF"));
+        debtErrorMessage.setBounds(0, 150, 1382, 864);
+        debtErrorPanel.add(debtErrorMessage);
+
+        debtErrorMessage2.setHorizontalAlignment(JLabel.CENTER);
+        debtErrorMessage2.setVerticalAlignment(JLabel.CENTER);
+        debtErrorMessage2.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
+        debtErrorMessage2.setForeground(Color.decode("#FFFFFF"));
+        debtErrorMessage2.setBounds(0, -50, 1382, 864);
+        debtErrorPanel.add(debtErrorMessage2);
+
         setVisible(true);
     }
 
@@ -296,4 +356,3 @@ public class ATMGUI extends JFrame {
         screenPanel.repaint();
     }
 }
-
