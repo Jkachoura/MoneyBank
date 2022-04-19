@@ -73,7 +73,6 @@ class ATM extends Thread {
         attempts = 0;
         while (true) {
             Thread.yield();
-            // TO DO remove input en confirm buttons
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 if (!keypadInput.equals("*") && !keypadInput.equals("#")) {
@@ -143,14 +142,13 @@ class ATM extends Thread {
                     case "B":
                         balance(UID);
                         break;
+                    case "C":
+                        withdrawMenu(UID);
+                        break;
                     //If * is pressed
                     case "*":
                         Thanks();
                         break;
-                    case "C":
-                        withdrawCustomAmount(UID);
-                        break;
-
                 }
             }
         }
@@ -168,6 +166,39 @@ class ATM extends Thread {
                     case "*":
                         menu(UID);
                         break;
+                }
+            }
+        }
+    }
+
+    private void withdrawMenu(String UID) {
+        agui.displayPanel("withdrawMenuPanel");
+        agui.withdrawMenuPanel.add(agui.logoIcon);
+        while (true) {
+            //Set up the variables and get the transactionID from the database
+            Thread.yield();
+            //Get keypad input
+            keypadInput = keypad.getInput();
+            if (keypadInput != null) {
+                switch (keypadInput) {
+                    //If D is pressed
+                    case "A":
+                        //Todo withdraw functie €10
+                        break;
+                    case "B":
+                        //Todo withdraw functie €20
+                        break;
+                    case "C":
+                        //Todo withdraw functie €100
+                        break;
+                    //If * is pressed
+                    case "D":
+                        withdrawCustomAmount(UID);
+                        break;
+                    case "*":
+                        menu(UID);
+                        break;
+
                 }
             }
         }
@@ -207,7 +238,7 @@ class ATM extends Thread {
                     }
                 }
             }
-            // TO DO print functie
+            //todo print functie
             receipt(UID);
         }
     }
