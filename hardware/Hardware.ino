@@ -12,6 +12,9 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 #define TX_PIN 10 // Arduino transmit  BLUE WIRE  labeled RX on printer
 #define RX_PIN 11 // Arduino receive   GREEN WIRE   labeled TX on printer
 
+#define mBoven 12
+#define mBeneden 13
+
 SoftwareSerial mySerial(RX_PIN, TX_PIN); // Declare SoftwareSerial obj first
 Adafruit_Thermal printer(&mySerial);
 
@@ -25,6 +28,12 @@ const byte COLS = 4;
 String passwordInput;
 int passwordLength;
 int attemptCounter;
+
+//Gelddispenser
+String geldData = "";
+int totaal10 = 15;
+int totaal50 = 15;
+int draaiTijd = 1200;
 
 char hexaKeys[ROWS][COLS] = {
   {'1', '2', '3', 'A'},
@@ -46,7 +55,12 @@ void setup()
   mfrc522.PCD_Init();   // Initiate MFRC522
   //  Serial.println();
   printer.begin();       // Init printer (same regardless of serial type)
+  pinMode(mBoven, OUTPUT);
+  pinMode(mBeneden, OUTPUT);
+  analogWrite(mBeneden, 0);
+  analogWrite(mBoven, 0);
 }
+
 void loop()
 {
   String allDataIn = "";
@@ -56,12 +70,13 @@ void loop()
   int dataLength = allDataIn.length();
   dateTime = allDataIn.substring(0, 15);
   IBAN = allDataIn.substring(15,19);
-  wantsReceipt = (int)allDataIn.substring(dataLength - 1, dataLength).toInt();
-
+  wantsReceipt = (int)allDataIn.substring(19, 20).toInt();
+  geldData = allDataIn.substring(20, 22);
+  
   if (wantsReceipt == 1) {
     printReceipt();;
   }
-
+  checkAantal(geldData);
   UIDSend();
   checkKeyInput();
 }
@@ -152,4 +167,24 @@ String addSpaces(String lStr, String rStr) {    // Adds spaces in between two st
   }
 
   return lStr + spaces + rStr;
+}
+
+void checkAantal(String geldData){
+  int hoeveelheid10 = geldData.substring(0, 1).toInt();
+  int hoeveelheid50 = geldData.substring(1, 2).toInt();
+
+  Serial.print("G");
+  if(totaal10 >= hoeveelheid10){
+    Serial.print("1");
+  }
+  else if(totaal10 < hoeveelheid10){
+    Serial.print("0");
+  }
+  else if(totaal50 >= hoeveelheid50){
+    Serial.print("1");
+  }
+  else if(totaal50 < hoeveelheid50){
+    Serial.print("0");
+  }
+  Serial.println("G");
 }
