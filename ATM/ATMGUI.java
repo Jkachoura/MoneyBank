@@ -25,6 +25,9 @@ public class ATMGUI extends JFrame {
     //Menu screen
     public JPanel menuPanel;
 
+    //Withdraw menu screen
+    public JPanel withdrawMenuPanel;
+
     //Balance screen
     public JPanel BalancePanel;
     public JLabel yourBalance = new JLabel("Your Balance is ");
@@ -204,14 +207,6 @@ public class ATMGUI extends JFrame {
         btnWithdraw.setBounds(591, 357, 150, 75);
         menuPanel.add(btnWithdraw);
 
-        // JLabel label_20 = new JLabel("D", SwingConstants.CENTER);
-        // label_20.setOpaque(true);
-        // label_20.setForeground(Color.decode("#FFFFFF"));
-        // label_20.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
-        // label_20.setBackground(Color.decode("#22303C"));
-        // label_20.setBounds(1250, 700, 50, 75);
-        // menuPanel.add(label_20);
-
         JLabel label_25 = new JLabel("*", SwingConstants.CENTER);
         label_25.setVerticalAlignment(SwingConstants.BOTTOM);
         label_25.setOpaque(true);
@@ -220,14 +215,6 @@ public class ATMGUI extends JFrame {
         label_25.setBackground(Color.decode("#22303C"));
         label_25.setBounds(75, 700, 50, 75);
         menuPanel.add(label_25);
-
-        // JButton btnBack = new JButton("Back");
-        // btnBack.setForeground(Color.WHITE);
-        // btnBack.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
-        // btnBack.setFocusPainted(false);
-        // btnBack.setBackground(Color.decode("#018786"));
-        // btnBack.setBounds(1100, 700, 150, 75);
-        // menuPanel.add(btnBack);
 
         JButton btnAbort = new JButton("Abort");
         btnAbort.setForeground(Color.WHITE);
@@ -271,7 +258,97 @@ public class ATMGUI extends JFrame {
 
         BalancePanel.add(logoIcon);
 
-        //Withdraw screen
+        //Withdraw menu screen
+        withdrawMenuPanel = new JPanel();
+        withdrawMenuPanel.setLayout(null);
+        withdrawMenuPanel.setBackground(Color.decode("#15202B"));
+        Windows.add(withdrawMenuPanel, "withdrawMenuPanel");
+
+        JLabel aLabelWM = new JLabel("A", SwingConstants.CENTER);
+        aLabelWM.setOpaque(true);
+        aLabelWM.setForeground(Color.decode("#FFFFFF"));
+        aLabelWM.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        aLabelWM.setBackground(Color.decode("#22303C"));
+        aLabelWM.setBounds(741, 257, 50, 75);
+        withdrawMenuPanel.add(aLabelWM);
+
+        JLabel bLabelWM = new JLabel("B", SwingConstants.CENTER);
+        bLabelWM.setOpaque(true);
+        bLabelWM.setForeground(Color.decode("#FFFFFF"));
+        bLabelWM.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        bLabelWM.setBackground(Color.decode("#22303C"));
+        bLabelWM.setBounds(741, 357, 50, 75);
+        withdrawMenuPanel.add(bLabelWM);
+
+        JLabel cLabelWM = new JLabel("C", SwingConstants.CENTER);
+        cLabelWM.setVerticalAlignment(SwingConstants.BOTTOM);
+        cLabelWM.setOpaque(true);
+        cLabelWM.setForeground(Color.decode("#FFFFFF"));
+        cLabelWM.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        cLabelWM.setBackground(Color.decode("#22303C"));
+        cLabelWM.setBounds(741, 462, 50, 75);
+        withdrawMenuPanel.add(cLabelWM);
+
+        JLabel dLabelWM = new JLabel("D", SwingConstants.CENTER);
+        dLabelWM.setVerticalAlignment(SwingConstants.BOTTOM);
+        dLabelWM.setOpaque(true);
+        dLabelWM.setForeground(Color.decode("#FFFFFF"));
+        dLabelWM.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        dLabelWM.setBackground(Color.decode("#22303C"));
+        dLabelWM.setBounds(741, 567, 50, 75);
+        withdrawMenuPanel.add(dLabelWM);
+
+        JButton btn20WM = new JButton("Pin €20");
+        btn20WM.setForeground(Color.WHITE);
+        btn20WM.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btn20WM.setFocusPainted(false);
+        btn20WM.setBackground(Color.decode("#22303C"));
+        btn20WM.setBounds(591, 257, 150, 75);
+        withdrawMenuPanel.add(btn20WM);
+
+        JButton btn50WM = new JButton("Pin €50");
+        btn50WM.setForeground(Color.WHITE);
+        btn50WM.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btn50WM.setFocusPainted(false);
+        btn50WM.setBackground(Color.decode("#22303C"));
+        btn50WM.setBounds(591, 357, 150, 75);
+        withdrawMenuPanel.add(btn50WM);
+
+        JButton btn100WM = new JButton("Pin €100");
+        btn100WM.setForeground(Color.WHITE);
+        btn100WM.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btn100WM.setFocusPainted(false);
+        btn100WM.setBackground(Color.decode("#22303C"));
+        btn100WM.setBounds(591, 462, 150, 75);
+        withdrawMenuPanel.add(btn100WM);
+
+        JButton btnCustomWM = new JButton("Custom");
+        btnCustomWM.setForeground(Color.WHITE);
+        btnCustomWM.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnCustomWM.setFocusPainted(false);
+        btnCustomWM.setBackground(Color.decode("#22303C"));
+        btnCustomWM.setBounds(591, 567, 150, 75);
+        withdrawMenuPanel.add(btnCustomWM);
+
+        JLabel starLabelWM = new JLabel("*", SwingConstants.CENTER);
+        starLabelWM.setVerticalAlignment(SwingConstants.BOTTOM);
+        starLabelWM.setOpaque(true);
+        starLabelWM.setForeground(Color.decode("#FFFFFF"));
+        starLabelWM.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        starLabelWM.setBackground(Color.decode("#22303C"));
+        starLabelWM.setBounds(75, 700, 50, 75);
+        withdrawMenuPanel.add(starLabelWM);
+
+        JButton btnAbortWM = new JButton("Back");
+        btnAbortWM.setForeground(Color.WHITE);
+        btnAbortWM.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnAbortWM.setFocusPainted(false);
+        btnAbortWM.setBackground(Color.decode("#B00020"));
+        btnAbortWM.setBounds(125, 700, 150, 75);
+        withdrawMenuPanel.add(btnAbortWM);
+
+
+        //Withdraw custom amount screen
         withdrawPanel = new JPanel();
         withdrawPanel.setLayout(null);
         withdrawPanel.setBackground(Color.decode("#15202B"));
