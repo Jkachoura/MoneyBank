@@ -21,6 +21,7 @@ Adafruit_Thermal printer(&mySerial);
 int wantsReceipt;
 String dateTime = "";
 String IBAN = "";
+int withdraw = 0;
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -69,14 +70,17 @@ void loop()
   }
   int dataLength = allDataIn.length();
   dateTime = allDataIn.substring(0, 15);
-  IBAN = allDataIn.substring(15,19);
+  IBAN = allDataIn.substring(15, 19);
   wantsReceipt = (int)allDataIn.substring(19, 20).toInt();
-  geldData = allDataIn.substring(20, 22);
-  
+  withdraw = allDataIn.substring(20, 21).toInt();
+  geldData = allDataIn.substring(21, 23);
+
   if (wantsReceipt == 1) {
-    printReceipt();;
+    printReceipt();
   }
-  checkAantal(geldData);
+  if (withdraw == 1) {
+    checkAantal(geldData);
+  }
   UIDSend();
   checkKeyInput();
 }
@@ -169,7 +173,7 @@ String addSpaces(String lStr, String rStr) {    // Adds spaces in between two st
   return lStr + spaces + rStr;
 }
 
-void checkAantal(String geldData){
+void checkAantal(String geldData) {
   int hoeveelheid10 = geldData.substring(0, 1).toInt();
   int hoeveelheid50 = geldData.substring(1, 2).toInt();
 
@@ -177,41 +181,41 @@ void checkAantal(String geldData){
   boolean conditie50 = totaal50 >= hoeveelheid50;
 
   Serial.print("G");
-  if(conditie10){
+  if (conditie10) {
     Serial.print("1");
   }
-  else if(!conditie10){
+  else if (!conditie10) {
     Serial.print("0");
   }
-  if(conditie50){
+  if (conditie50) {
     Serial.print("1");
   }
-  else if(!conditie50){
+  else if (!conditie50) {
     Serial.print("0");
   }
-  
+
   Serial.println("G");
 
-  if(conditie10 && conditie50){
+  if (conditie10 && conditie50) {
     draaiMBoven(hoeveelheid10);
     draaiMBeneden(hoeveelheid50);
   }
 }
 
-void draaiMBoven(int aantal){
+void draaiMBoven(int aantal) {
   analogWrite(mBoven, 200);
   delay(aantal * draaiTijd);
   analogWrite(mBoven, 0);
-  for(int i = 0; i < aantal; i++){
+  for (int i = 0; i < aantal; i++) {
     totaal10--;
   }
 }
 
-void draaiMBeneden(int aantal){
+void draaiMBeneden(int aantal) {
   analogWrite(mBeneden, 200);
   delay(aantal * draaiTijd);
   analogWrite(mBeneden, 0);
-  for(int i = 0; i < aantal; i++){
+  for (int i = 0; i < aantal; i++) {
     totaal50--;
   }
 }
