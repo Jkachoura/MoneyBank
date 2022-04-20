@@ -22,6 +22,7 @@ int wantsReceipt;
 String dateTime = "";
 String IBAN = "";
 int withdraw = 0;
+String amount = "";
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -73,6 +74,7 @@ void loop()
   wantsReceipt = (int)allDataIn.substring(19, 20).toInt();
   withdraw = allDataIn.substring(20, 21).toInt();
   geldData = allDataIn.substring(21, 23);
+  amount = allDataIn.substring(23, 26);
 
   if (wantsReceipt == 1) {
     printReceipt();
@@ -139,7 +141,7 @@ void printReceipt() {
   printer.println(("- - - - - - - - - - - - - - - -"));   // LINE
 
   printer.println(addSpaces("IBAN :", "XXXX XXXX " + IBAN));  // IBAN Number shows only last 4
-  printer.println(addSpaces("Amount :", "20 EUR"));  // Amount printed
+  printer.println(addSpaces("Amount : €", amount));  // Amount printed
   printer.println(addSpaces("Transaction# :", "14260"));   // transaction ID
 
   printer.println("- - - - - - - - - - - - - - - -");   // line
