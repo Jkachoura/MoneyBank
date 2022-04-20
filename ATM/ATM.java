@@ -295,7 +295,6 @@ class ATM extends Thread {
             //ongeldig bedrag ingevoerd (geen tiental of 0)
             invalidAmount(UID, amount);
         } else {
-            //todo printen scherm
             agui.displayPanel("printingPanel");
             agui.printingPanel.add(agui.logoIcon);
             agui.printingMoney.setText("Printing " + "€" + amount);
@@ -306,7 +305,7 @@ class ATM extends Thread {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            receipt(UID);
+            receipt(UID,amount);
         }
 
         //todo error scherm niet genoeg biljetten aanwezig (volgende sprint)
@@ -359,7 +358,7 @@ class ATM extends Thread {
         }
     }
 
-    private void receipt(String UID) {
+    private void receipt(String UID, int amount) {
         agui.displayPanel("receiptPanel");
         agui.receiptPanel.add(agui.logoIcon);
         while (true) {
@@ -371,7 +370,8 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If D is pressed print out a receipt and dispense the money
                     case "D":
-                        sCon.giveOutput(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mmdd/MM/yyyy")) + getIBAN(UID).substring(14, 18) + "1");
+                        sCon.giveOutput(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mmdd/MM/yyyy")) +
+                                getIBAN(UID).substring(14, 18) + "1" + "000" + amount);
                         thanks();
                         break;
                     //If * is pressed don't print out a receipt and dispense the money
