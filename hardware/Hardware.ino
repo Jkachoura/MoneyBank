@@ -12,8 +12,8 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 #define TX_PIN 10 // Arduino transmit  BLUE WIRE  labeled RX on printer
 #define RX_PIN 11 // Arduino receive   GREEN WIRE   labeled TX on printer
 
-#define mBoven 12
-#define mBeneden 13
+#define mBoven 13
+#define mBeneden 11
 
 SoftwareSerial mySerial(RX_PIN, TX_PIN); // Declare SoftwareSerial obj first
 Adafruit_Thermal printer(&mySerial);
@@ -54,7 +54,6 @@ void setup()
   Serial.begin(9600);   // Initiate a serial communication
   SPI.begin();      // Initiate  SPI bus
   mfrc522.PCD_Init();   // Initiate MFRC522
-  //  Serial.println();
   printer.begin();       // Init printer (same regardless of serial type)
   pinMode(mBoven, OUTPUT);
   pinMode(mBeneden, OUTPUT);
