@@ -12,9 +12,9 @@ public class ATMGUI extends JFrame {
     public JPanel scanCardPanel;
     private JLabel ScanCardTo = new JLabel("Scan your card to begin");
 
-    public JLabel Dlabelpin;
-    public JButton btnYespin;
-    public JLabel StarlabelPin;
+    public JLabel dLabelPin;
+    public JButton btnYesPin;
+    public JLabel starLabelPin;
     public JButton btnDeletePin;
 
     //Pincode Screen
@@ -25,17 +25,34 @@ public class ATMGUI extends JFrame {
     //Menu screen
     public JPanel menuPanel;
 
-    //Withdraw menu screen
-    public JPanel withdrawMenuPanel;
-
     //Balance screen
     public JPanel BalancePanel;
     public JLabel yourBalance = new JLabel("Your Balance is ");
 
-    //Withdraw screen
+    //Withdraw menu screen
+    public JPanel withdrawMenuPanel;
+
+    //Withdraw okay/ error screen
+    public JPanel withdrawProcessScreen;
+    public JLabel withdrawStatusMessage = new JLabel("");
+
+    //Withdraw custom amount screen
     public JPanel withdrawPanel;
     public JLabel withdrawMessage = new JLabel("Enter withdraw amount: ");
     public JLabel withdrawAmountCustom = new JLabel("");
+
+    //Withdraw Insufficient Balance Options screen
+    public JPanel withdrawInsufOptionsPanel;
+    private JLabel withdrawInsufBal = new JLabel("Insufficient balance.");
+
+    //Withdraw suggestion screen
+    public JPanel withdrawSuggestionPanel;
+    public JLabel withdrawSuggestionText = new JLabel("Would you like to withdraw");
+    public JLabel withdrawSuggestionText2;
+
+    //printing money Screen
+    public JPanel printingPanel;
+    public JLabel printingMoney = new JLabel("");
 
     //Receipt screen
     public JPanel receiptPanel;
@@ -65,7 +82,7 @@ public class ATMGUI extends JFrame {
         setResizable(false);
         setAlwaysOnTop(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1382, 864);
+        setSize(1383, 864);
         setUndecorated(true);
         setCursor(getToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(), null));
         getContentPane().setLayout(null);
@@ -130,32 +147,32 @@ public class ATMGUI extends JFrame {
         pinMessage.setBounds(0, 200, 1382, 864);
         pincodePanel.add(pinMessage);
 
-        Dlabelpin = new JLabel("D", SwingConstants.CENTER);
-        Dlabelpin.setOpaque(true);
-        Dlabelpin.setForeground(Color.decode("#FFFFFF"));
-        Dlabelpin.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
-        Dlabelpin.setBackground(Color.decode("#22303C"));
-        Dlabelpin.setBounds(1250, 700, 50, 75);
-        pincodePanel.add(Dlabelpin);
+        dLabelPin = new JLabel("D", SwingConstants.CENTER);
+        dLabelPin.setOpaque(true);
+        dLabelPin.setForeground(Color.decode("#FFFFFF"));
+        dLabelPin.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        dLabelPin.setBackground(Color.decode("#22303C"));
+        dLabelPin.setBounds(1250, 700, 50, 75);
+        pincodePanel.add(dLabelPin);
 
-        btnYespin = new JButton("Confirm");
-        btnYespin.setForeground(Color.WHITE);
-        btnYespin.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
-        btnYespin.setFocusPainted(false);
-        btnYespin.setBackground(Color.decode("#018786"));
-        btnYespin.setBounds(1100, 700, 150, 75);
-        pincodePanel.add(btnYespin);
+        btnYesPin = new JButton("Confirm");
+        btnYesPin.setForeground(Color.WHITE);
+        btnYesPin.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnYesPin.setFocusPainted(false);
+        btnYesPin.setBackground(Color.decode("#018786"));
+        btnYesPin.setBounds(1100, 700, 150, 75);
+        pincodePanel.add(btnYesPin);
 
-        StarlabelPin = new JLabel("*", SwingConstants.CENTER);
-        StarlabelPin.setVerticalAlignment(SwingConstants.BOTTOM);
-        StarlabelPin.setOpaque(true);
-        StarlabelPin.setForeground(Color.decode("#FFFFFF"));
-        StarlabelPin.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
-        StarlabelPin.setBackground(Color.decode("#22303C"));
-        StarlabelPin.setBounds(75, 700, 50, 75);
-        pincodePanel.add(StarlabelPin);
+        starLabelPin = new JLabel("*", SwingConstants.CENTER);
+        starLabelPin.setVerticalAlignment(SwingConstants.BOTTOM);
+        starLabelPin.setOpaque(true);
+        starLabelPin.setForeground(Color.decode("#FFFFFF"));
+        starLabelPin.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        starLabelPin.setBackground(Color.decode("#22303C"));
+        starLabelPin.setBounds(75, 700, 50, 75);
+        pincodePanel.add(starLabelPin);
 
-         btnDeletePin = new JButton("Delete");
+        btnDeletePin = new JButton("Delete");
         btnDeletePin.setForeground(Color.WHITE);
         btnDeletePin.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
         btnDeletePin.setFocusPainted(false);
@@ -166,7 +183,7 @@ public class ATMGUI extends JFrame {
         logoIcon.setHorizontalAlignment(JLabel.CENTER);
         logoIcon.setVerticalAlignment(JLabel.TOP);
         logoIcon.setBounds(0, 0, 1382, 864);
-        pincodePanel.add(logoIcon);
+
 
         //Menu screen
         menuPanel = new JPanel();
@@ -174,56 +191,55 @@ public class ATMGUI extends JFrame {
         menuPanel.setBackground(Color.decode("#15202B"));
         Windows.add(menuPanel, "menuPanel");
 
-        JLabel label_21 = new JLabel("B", SwingConstants.CENTER);
-        label_21.setOpaque(true);
-        label_21.setForeground(Color.decode("#FFFFFF"));
-        label_21.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
-        label_21.setBackground(Color.decode("#22303C"));
-        label_21.setBounds(741, 462, 50, 75);
-        menuPanel.add(label_21);
+        JLabel bLabelMenu = new JLabel("B", SwingConstants.CENTER);
+        bLabelMenu.setOpaque(true);
+        bLabelMenu.setForeground(Color.decode("#FFFFFF"));
+        bLabelMenu.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        bLabelMenu.setBackground(Color.decode("#22303C"));
+        bLabelMenu.setBounds(741, 357, 50, 75);
+        menuPanel.add(bLabelMenu);
 
-        JLabel label_26 = new JLabel("C", SwingConstants.CENTER);
-        label_26.setVerticalAlignment(SwingConstants.BOTTOM);
-        label_26.setOpaque(true);
-        label_26.setForeground(Color.decode("#FFFFFF"));
-        label_26.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
-        label_26.setBackground(Color.decode("#22303C"));
-        label_26.setBounds(741, 357, 50, 75);
-        menuPanel.add(label_26);
+        JLabel cLabelMenu = new JLabel("C", SwingConstants.CENTER);
+        cLabelMenu.setVerticalAlignment(SwingConstants.BOTTOM);
+        cLabelMenu.setOpaque(true);
+        cLabelMenu.setForeground(Color.decode("#FFFFFF"));
+        cLabelMenu.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        cLabelMenu.setBackground(Color.decode("#22303C"));
+        cLabelMenu.setBounds(741, 462, 50, 75);
+        menuPanel.add(cLabelMenu);
 
-        JButton btnBalance = new JButton("Balance");
-        btnBalance.setForeground(Color.WHITE);
-        btnBalance.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
-        btnBalance.setFocusPainted(false);
-        btnBalance.setBackground(Color.decode("#22303C"));
-        btnBalance.setBounds(591, 462, 150, 75);
-        menuPanel.add(btnBalance);
+        JButton btnBalanceMenu = new JButton("Balance");
+        btnBalanceMenu.setForeground(Color.WHITE);
+        btnBalanceMenu.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnBalanceMenu.setFocusPainted(false);
+        btnBalanceMenu.setBackground(Color.decode("#22303C"));
+        btnBalanceMenu.setBounds(591, 357, 150, 75);
+        menuPanel.add(btnBalanceMenu);
 
-        JButton btnWithdraw = new JButton("Withdraw");
-        btnWithdraw.setForeground(Color.WHITE);
-        btnWithdraw.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
-        btnWithdraw.setFocusPainted(false);
-        btnWithdraw.setBackground(Color.decode("#22303C"));
-        btnWithdraw.setBounds(591, 357, 150, 75);
-        menuPanel.add(btnWithdraw);
+        JButton btnWithdrawMenu = new JButton("Withdraw");
+        btnWithdrawMenu.setForeground(Color.WHITE);
+        btnWithdrawMenu.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnWithdrawMenu.setFocusPainted(false);
+        btnWithdrawMenu.setBackground(Color.decode("#22303C"));
+        btnWithdrawMenu.setBounds(591, 462, 150, 75);
+        menuPanel.add(btnWithdrawMenu);
 
-        JLabel label_25 = new JLabel("*", SwingConstants.CENTER);
-        label_25.setVerticalAlignment(SwingConstants.BOTTOM);
-        label_25.setOpaque(true);
-        label_25.setForeground(Color.decode("#FFFFFF"));
-        label_25.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
-        label_25.setBackground(Color.decode("#22303C"));
-        label_25.setBounds(75, 700, 50, 75);
-        menuPanel.add(label_25);
+        JLabel starLabelMenu = new JLabel("*", SwingConstants.CENTER);
+        starLabelMenu.setVerticalAlignment(SwingConstants.BOTTOM);
+        starLabelMenu.setOpaque(true);
+        starLabelMenu.setForeground(Color.decode("#FFFFFF"));
+        starLabelMenu.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        starLabelMenu.setBackground(Color.decode("#22303C"));
+        starLabelMenu.setBounds(75, 700, 50, 75);
+        menuPanel.add(starLabelMenu);
 
-        JButton btnAbort = new JButton("Abort");
-        btnAbort.setForeground(Color.WHITE);
-        btnAbort.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
-        btnAbort.setFocusPainted(false);
-        btnAbort.setBackground(Color.decode("#B00020"));
-        btnAbort.setBounds(125, 700, 150, 75);
-        menuPanel.add(btnAbort);
-
+        JButton btnAbortMenu = new JButton("Abort");
+        btnAbortMenu.setForeground(Color.WHITE);
+        btnAbortMenu.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnAbortMenu.setFocusPainted(false);
+        btnAbortMenu.setBackground(Color.decode("#B00020"));
+        btnAbortMenu.setBounds(125, 700, 150, 75);
+        menuPanel.add(btnAbortMenu);
 
         //Balance screen
         BalancePanel = new JPanel();
@@ -238,25 +254,23 @@ public class ATMGUI extends JFrame {
         yourBalance.setBounds(0, 0, 1382, 864);
         BalancePanel.add(yourBalance);
 
-        JLabel label_69 = new JLabel("*", SwingConstants.CENTER);
-        label_69.setVerticalAlignment(SwingConstants.BOTTOM);
-        label_69.setOpaque(true);
-        label_69.setForeground(Color.decode("#FFFFFF"));
-        label_69.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
-        label_69.setBackground(Color.decode("#22303C"));
-        label_69.setBounds(75, 700, 50, 75);
-        BalancePanel.add(label_69);
+        JLabel starLabelBalance = new JLabel("*", SwingConstants.CENTER);
+        starLabelBalance.setVerticalAlignment(SwingConstants.BOTTOM);
+        starLabelBalance.setOpaque(true);
+        starLabelBalance.setForeground(Color.decode("#FFFFFF"));
+        starLabelBalance.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        starLabelBalance.setBackground(Color.decode("#22303C"));
+        starLabelBalance.setBounds(75, 700, 50, 75);
+        BalancePanel.add(starLabelBalance);
 
-        JButton btnBack2 = new JButton("Back");
-        btnBack2.setForeground(Color.WHITE);
-        btnBack2.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
-        btnBack2.setFocusPainted(false);
-        btnBack2.setBackground(Color.decode("#B00020"));
-        btnBack2.setBounds(125, 700, 150, 75);
-        BalancePanel.add(btnBack2);
+        JButton btnBackBalance = new JButton("Back");
+        btnBackBalance.setForeground(Color.WHITE);
+        btnBackBalance.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnBackBalance.setFocusPainted(false);
+        btnBackBalance.setBackground(Color.decode("#B00020"));
+        btnBackBalance.setBounds(125, 700, 150, 75);
+        BalancePanel.add(btnBackBalance);
 
-
-        BalancePanel.add(logoIcon);
 
         //Withdraw menu screen
         withdrawMenuPanel = new JPanel();
@@ -368,13 +382,13 @@ public class ATMGUI extends JFrame {
         withdrawAmountCustom.setBounds(0, 200, 1382, 864);
         withdrawPanel.add(withdrawAmountCustom);
 
-        JLabel Dlabel2 = new JLabel("D", SwingConstants.CENTER);
-        Dlabel2.setOpaque(true);
-        Dlabel2.setForeground(Color.decode("#FFFFFF"));
-        Dlabel2.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
-        Dlabel2.setBackground(Color.decode("#22303C"));
-        Dlabel2.setBounds(1250, 700, 50, 75);
-        withdrawPanel.add(Dlabel2);
+        JLabel dLabelCustom = new JLabel("D", SwingConstants.CENTER);
+        dLabelCustom.setOpaque(true);
+        dLabelCustom.setForeground(Color.decode("#FFFFFF"));
+        dLabelCustom.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        dLabelCustom.setBackground(Color.decode("#22303C"));
+        dLabelCustom.setBounds(1250, 700, 50, 75);
+        withdrawPanel.add(dLabelCustom);
 
         JButton btnYes2 = new JButton("Confirm");
         btnYes2.setForeground(Color.WHITE);
@@ -401,10 +415,150 @@ public class ATMGUI extends JFrame {
         btnBack3.setBounds(125, 700, 150, 75);
         withdrawPanel.add(btnBack3);
 
-        withdrawPanel.add(logoIcon);
+
+        //Withdraw process screen
+        withdrawProcessScreen = new JPanel();
+        withdrawProcessScreen.setLayout(null);
+        withdrawProcessScreen.setBackground(Color.decode("#15202B"));
+        Windows.add(withdrawProcessScreen, "withdrawProcessScreen");
+
+        withdrawStatusMessage.setHorizontalAlignment(JLabel.CENTER);
+        withdrawStatusMessage.setVerticalAlignment(JLabel.CENTER);
+        withdrawStatusMessage.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
+        withdrawStatusMessage.setForeground(Color.decode("#FFFFFF"));
+        withdrawStatusMessage.setBounds(0, 0, 1382, 864);
+        withdrawProcessScreen.add(withdrawStatusMessage);
 
 
-        //Receipt
+        //Withdraw Insufficient Balance Options screen
+        withdrawInsufOptionsPanel = new JPanel();
+        withdrawInsufOptionsPanel.setLayout(null);
+        withdrawInsufOptionsPanel.setBackground(Color.decode("#15202B"));
+        Windows.add(withdrawInsufOptionsPanel, "withdrawInsufOptionsPanel");
+
+        withdrawInsufBal.setHorizontalAlignment(JLabel.CENTER);
+        withdrawInsufBal.setVerticalAlignment(JLabel.CENTER);
+        withdrawInsufBal.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
+        withdrawInsufBal.setForeground(Color.decode("#FFFFFF"));
+        withdrawInsufBal.setBounds(0, 0, 1382, 864);
+        withdrawInsufOptionsPanel.add(withdrawInsufBal);
+
+        JLabel bLabelInsufOptions = new JLabel("B", SwingConstants.CENTER);
+        bLabelInsufOptions.setOpaque(true);
+        bLabelInsufOptions.setForeground(Color.decode("#FFFFFF"));
+        bLabelInsufOptions.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        bLabelInsufOptions.setBackground(Color.decode("#22303C"));
+        bLabelInsufOptions.setBounds(801, 700, 50, 75);
+        withdrawInsufOptionsPanel.add(bLabelInsufOptions);
+
+        JLabel cLabelInsufOptions = new JLabel("C", SwingConstants.CENTER);
+        cLabelInsufOptions.setVerticalAlignment(SwingConstants.BOTTOM);
+        cLabelInsufOptions.setOpaque(true);
+        cLabelInsufOptions.setForeground(Color.decode("#FFFFFF"));
+        cLabelInsufOptions.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        cLabelInsufOptions.setBackground(Color.decode("#22303C"));
+        cLabelInsufOptions.setBounds(1257, 700, 50, 75);
+        withdrawInsufOptionsPanel.add(cLabelInsufOptions);
+
+        JButton btnBalanceInsufOptions = new JButton("Check your balance");
+        btnBalanceInsufOptions.setHorizontalAlignment(JButton.CENTER);
+        btnBalanceInsufOptions.setForeground(Color.WHITE);
+        btnBalanceInsufOptions.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnBalanceInsufOptions.setFocusPainted(false);
+        btnBalanceInsufOptions.setBackground(Color.decode("#22303C"));
+        btnBalanceInsufOptions.setBounds(531, 700, 270, 75);
+        withdrawInsufOptionsPanel.add(btnBalanceInsufOptions);
+
+        JButton btnWithdrawInsufOptions = new JButton("Enter different amount");
+        btnWithdrawInsufOptions.setForeground(Color.WHITE);
+        btnWithdrawInsufOptions.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnWithdrawInsufOptions.setFocusPainted(false);
+        btnWithdrawInsufOptions.setBackground(Color.decode("#22303C"));
+        btnWithdrawInsufOptions.setBounds(957, 700, 300, 75);
+        withdrawInsufOptionsPanel.add(btnWithdrawInsufOptions);
+
+        JLabel starLabelInsufOptions = new JLabel("*", SwingConstants.CENTER);
+        starLabelInsufOptions.setVerticalAlignment(SwingConstants.BOTTOM);
+        starLabelInsufOptions.setOpaque(true);
+        starLabelInsufOptions.setForeground(Color.decode("#FFFFFF"));
+        starLabelInsufOptions.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        starLabelInsufOptions.setBackground(Color.decode("#22303C"));
+        starLabelInsufOptions.setBounds(75, 700, 50, 75);
+        withdrawInsufOptionsPanel.add(starLabelInsufOptions);
+
+        JButton btnAbortInsufOptions = new JButton("Cancel transaction");
+        btnAbortInsufOptions.setForeground(Color.WHITE);
+        btnAbortInsufOptions.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnAbortInsufOptions.setFocusPainted(false);
+        btnAbortInsufOptions.setBackground(Color.decode("#B00020"));
+        btnAbortInsufOptions.setBounds(125, 700, 280, 75);
+        withdrawInsufOptionsPanel.add(btnAbortInsufOptions);
+
+        //Withdraw suggestion screen
+        withdrawSuggestionPanel = new JPanel();
+        withdrawSuggestionPanel.setLayout(null);
+        withdrawSuggestionPanel.setBackground(Color.decode("#15202B"));
+        Windows.add(withdrawSuggestionPanel, "withdrawSuggestionPanel");
+
+        JLabel dLabelWSug = new JLabel("D", SwingConstants.CENTER);
+        dLabelWSug.setOpaque(true);
+        dLabelWSug.setForeground(Color.decode("#FFFFFF"));
+        dLabelWSug.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        dLabelWSug.setBackground(Color.decode("#22303C"));
+        dLabelWSug.setBounds(1250, 700, 50, 75);
+        withdrawSuggestionPanel.add(dLabelWSug);
+
+        JLabel starLabelWSug = new JLabel("*", SwingConstants.CENTER);
+        starLabelWSug.setVerticalAlignment(SwingConstants.BOTTOM);
+        starLabelWSug.setOpaque(true);
+        starLabelWSug.setForeground(Color.decode("#FFFFFF"));
+        starLabelWSug.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        starLabelWSug.setBackground(Color.decode("#22303C"));
+        starLabelWSug.setBounds(75, 700, 50, 75);
+        withdrawSuggestionPanel.add(starLabelWSug);
+
+        JButton yesButttonWSug = new JButton("Yes");
+        yesButttonWSug.setForeground(Color.WHITE);
+        yesButttonWSug.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        yesButttonWSug.setFocusPainted(false);
+        yesButttonWSug.setBackground(Color.decode("#018786"));
+        yesButttonWSug.setBounds(1100, 700, 150, 75);
+        withdrawSuggestionPanel.add(yesButttonWSug);
+
+        JButton noButtonWSug = new JButton("No");
+        noButtonWSug.setForeground(Color.WHITE);
+        noButtonWSug.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        noButtonWSug.setFocusPainted(false);
+        noButtonWSug.setBackground(Color.decode("#B00020"));
+        noButtonWSug.setBounds(125, 700, 150, 75);
+        withdrawSuggestionPanel.add(noButtonWSug);
+
+        withdrawSuggestionText.setForeground(Color.decode("#FFFFFF"));
+        withdrawSuggestionText.setHorizontalAlignment(SwingConstants.CENTER);
+        withdrawSuggestionText.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
+        withdrawSuggestionText.setBounds(0, -50, 1382, 864);
+        withdrawSuggestionPanel.add(withdrawSuggestionText);
+
+        withdrawSuggestionText2 = new JLabel("");
+        withdrawSuggestionText2.setForeground(Color.decode("#FFFFFF"));
+        withdrawSuggestionText2.setHorizontalAlignment(SwingConstants.CENTER);
+        withdrawSuggestionText2.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
+        withdrawSuggestionText2.setBounds(0, 100, 1382, 864);
+        withdrawSuggestionPanel.add(withdrawSuggestionText2);
+
+        // Printing panel
+        printingPanel = new JPanel();
+        printingPanel.setLayout(null);
+        printingPanel.setBackground(Color.decode("#15202B"));
+        Windows.add(printingPanel, "printingPanel");
+
+        printingMoney.setFont(new Font("Circular Std Bold", Font.PLAIN, 70));
+        printingMoney.setForeground(Color.decode("#FFFFFF"));
+        printingMoney.setHorizontalAlignment(SwingConstants.CENTER);
+        printingMoney.setBounds(0, 0, 1382, 864);
+        printingPanel.add(printingMoney);
+
+        //Receipt screen
         receiptPanel = new JPanel();
         receiptPanel.setLayout(null);
         receiptPanel.setBackground(Color.decode("#15202B"));
@@ -450,10 +604,8 @@ public class ATMGUI extends JFrame {
         Receiptyn.setBounds(0, 0, 1382, 864);
         receiptPanel.add(Receiptyn);
 
-        receiptPanel.add(logoIcon);
 
-
-        //End screen
+        //Thanks screen
         thanksPanel = new JPanel();
         thanksPanel.setLayout(null);
         thanksPanel.setBackground(Color.decode("#15202B"));
@@ -485,7 +637,6 @@ public class ATMGUI extends JFrame {
         thisCardBlocked.setBounds(0, 0, 1382, 864);
         blockedCardPanel.add(thisCardBlocked);
 
-        blockedCardPanel.add(logoIcon);
 
         //Debt Error screen
         debtErrorPanel = new JPanel();
