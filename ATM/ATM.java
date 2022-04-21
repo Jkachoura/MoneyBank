@@ -74,14 +74,16 @@ class ATM extends Thread {
         agui.dLabelPin.setVisible(true);
         agui.btnYesPin.setVisible(true);
         agui.starLabelPin.setVisible(true);
+        agui.hashLabelPin.setVisible(true);
         agui.btnDeletePin.setVisible(true);
+        agui.btnAbortPin.setVisible(true);
 
         attempts = 0;
         while (true) {
             Thread.yield();
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
-                if (!keypadInput.equals("*") && !keypadInput.equals("#")) {
+                if (!keypadInput.equals("A") && !keypadInput.equals("B") && !keypadInput.equals("C") && !keypadInput.equals("D") && !keypadInput.equals("*") && !keypadInput.equals("#")) {
                     agui.pinMessage.setText("");
                     pincode = keypadInput;
                     agui.pinMessage.setText("*");
@@ -90,15 +92,16 @@ class ATM extends Thread {
                         if (keypadInput != null) {
                             if (keypadInput.equals("D")) {
                                 break;
-                            } else if (keypadInput.equals("*") && pincode.length() != 0) {
+                            } else if (keypadInput.equals("#") && pincode.length() != 0) {
                                 pincode = pincode.substring(0, pincode.length() - 1);
                                 agui.pinMessage.setText(agui.pinMessage.getText().substring(0, agui.pinMessage.getText().length() - 1));
                             } else if (!keypadInput.equals("A") && !keypadInput.equals("B") &&
-                                    !keypadInput.equals("C") && !keypadInput.equals("D") &&
-                                    !keypadInput.equals("*") && !keypadInput.equals("#") &&
-                                    pincode.length() < 4) {
+                                    !keypadInput.equals("C") && !keypadInput.equals("*") &&
+                                    !keypadInput.equals("#") && pincode.length() < 4) {
                                 pincode = pincode + keypadInput;
                                 agui.pinMessage.setText(agui.pinMessage.getText() + "*");
+                            } else if (keypadInput.equals("*")) {
+                                thanks();
                             }
                         }
                     }
@@ -107,7 +110,9 @@ class ATM extends Thread {
                         agui.dLabelPin.setVisible(false);
                         agui.btnYesPin.setVisible(false);
                         agui.starLabelPin.setVisible(false);
+                        agui.hashLabelPin.setVisible(false);
                         agui.btnDeletePin.setVisible(false);
+                        agui.btnAbortPin.setVisible(false);
 
                         agui.enterPin.setText("Welcome to Money Bank!");
                         agui.pinMessage.setText(" ");
@@ -132,6 +137,8 @@ class ATM extends Thread {
                         }
                         scanCard();
                     }
+                } else if (keypadInput.equals("*")) {
+                    thanks();
                 }
             }
         }
@@ -238,7 +245,7 @@ class ATM extends Thread {
                     if (pinAmount == null) {
                         pinAmount = keypadInput;
                         agui.withdrawAmountCustom.setText("€" + pinAmount);
-                    } else if (pinAmount.length() < 3){
+                    } else if (pinAmount.length() < 3) {
                         pinAmount = pinAmount + keypadInput;
                         agui.withdrawAmountCustom.setText(agui.withdrawAmountCustom.getText() + keypadInput);
                     }
@@ -246,6 +253,9 @@ class ATM extends Thread {
                     break;
                 } else if (keypadInput.equals("*")) {
                     withdrawMenu(UID);
+                } else if (keypadInput.equals("#") && pinAmount.length() != 0) {
+                    pinAmount = pinAmount.substring(0, pinAmount.length() - 1);
+                    agui.withdrawAmountCustom.setText(agui.withdrawAmountCustom.getText().substring(0, agui.withdrawAmountCustom.getText().length() - 1));
                 }
             }
         }
@@ -533,11 +543,8 @@ class ATM extends Thread {
         } catch (Exception e) {
             System.out.println(e);
         }
-        if (blockStatus.equals("1")) {
-            return true;
-        } else {
-            return false;
-        }
+        assert blockStatus != null;
+        return blockStatus.equals("1");
     }
 
     private boolean checkIfDebt(String UID) {
