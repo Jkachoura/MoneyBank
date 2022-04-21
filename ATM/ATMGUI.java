@@ -15,12 +15,14 @@ public class ATMGUI extends JFrame {
     public JLabel dLabelPin;
     public JButton btnYesPin;
     public JLabel starLabelPin;
-    public JButton btnDeletePin;
 
     //Pincode Screen
     public JPanel pincodePanel;
     public JLabel enterPin = new JLabel("Enter your pincode");
     public JLabel pinMessage = new JLabel("");
+    public JButton btnAbortPin;
+    public JButton btnDeletePin;
+    public JLabel hashLabelPin;
 
     //Menu screen
     public JPanel menuPanel;
@@ -173,12 +175,28 @@ public class ATMGUI extends JFrame {
         starLabelPin.setBounds(75, 700, 50, 75);
         pincodePanel.add(starLabelPin);
 
+        btnAbortPin = new JButton("Abort");
+        btnAbortPin.setForeground(Color.WHITE);
+        btnAbortPin.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnAbortPin.setFocusPainted(false);
+        btnAbortPin.setBackground(Color.decode("#B00020"));
+        btnAbortPin.setBounds(125, 700, 150, 75);
+        pincodePanel.add(btnAbortPin);
+
+        hashLabelPin = new JLabel("#", SwingConstants.CENTER);
+        hashLabelPin.setOpaque(true);
+        hashLabelPin.setForeground(Color.decode("#FFFFFF"));
+        hashLabelPin.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        hashLabelPin.setBackground(Color.decode("#22303C"));
+        hashLabelPin.setBounds(850, 700, 50, 75);
+        pincodePanel.add(hashLabelPin);
+
         btnDeletePin = new JButton("Delete");
         btnDeletePin.setForeground(Color.WHITE);
         btnDeletePin.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
         btnDeletePin.setFocusPainted(false);
-        btnDeletePin.setBackground(Color.decode("#B00020"));
-        btnDeletePin.setBounds(125, 700, 150, 75);
+        btnDeletePin.setBackground(Color.decode("#FFA000"));
+        btnDeletePin.setBounds(900, 700, 150, 75);
         pincodePanel.add(btnDeletePin);
 
         logoIcon.setHorizontalAlignment(JLabel.CENTER);
