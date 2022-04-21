@@ -96,6 +96,7 @@ public class ATMGUI extends JFrame {
         // hover color: "#22303C"
         // primary text: "#FFFFFF"
         // secondary text: "#8899A6"
+        // delete button: #FFA000
 
 
         //logo test
@@ -397,6 +398,22 @@ public class ATMGUI extends JFrame {
         btnYes2.setBackground(Color.decode("#018786"));
         btnYes2.setBounds(1100, 700, 150, 75);
         withdrawPanel.add(btnYes2);
+
+        JLabel hashLabelCustom = new JLabel("#", SwingConstants.CENTER);
+        hashLabelCustom.setOpaque(true);
+        hashLabelCustom.setForeground(Color.decode("#FFFFFF"));
+        hashLabelCustom.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        hashLabelCustom.setBackground(Color.decode("#22303C"));
+        hashLabelCustom.setBounds(850, 700, 50, 75);
+        withdrawPanel.add(hashLabelCustom);
+
+        JButton btnDelete = new JButton("Delete");
+        btnDelete.setForeground(Color.WHITE);
+        btnDelete.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnDelete.setFocusPainted(false);
+        btnDelete.setBackground(Color.decode("#FFA000"));
+        btnDelete.setBounds(900, 700, 150, 75);
+        withdrawPanel.add(btnDelete);
 
         JLabel label_70 = new JLabel("*", SwingConstants.CENTER);
         label_70.setVerticalAlignment(SwingConstants.BOTTOM);
