@@ -94,7 +94,10 @@ class ATM extends Thread {
                             } else if (keypadInput.equals("*") && pincode.length() != 0) {
                                 pincode = pincode.substring(0, pincode.length() - 1);
                                 agui.pinMessage.setText(agui.pinMessage.getText().substring(0, agui.pinMessage.getText().length() - 1));
-                            } else if (!keypadInput.equals("A") && !keypadInput.equals("B") && !keypadInput.equals("C") && !keypadInput.equals("D") && !keypadInput.equals("*") && !keypadInput.equals("#")) {
+                            } else if (!keypadInput.equals("A") && !keypadInput.equals("B") &&
+                                    !keypadInput.equals("C") && !keypadInput.equals("D") &&
+                                    !keypadInput.equals("*") && !keypadInput.equals("#") &&
+                                    pincode.length() < 4) {
                                 pincode = pincode + keypadInput;
                                 agui.pinMessage.setText(agui.pinMessage.getText() + "*");
                             }
@@ -300,7 +303,7 @@ class ATM extends Thread {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            receipt(UID,amount);
+            receipt(UID, amount);
         }
 
         //todo error scherm niet genoeg biljetten aanwezig (volgende sprint)
