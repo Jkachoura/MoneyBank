@@ -147,6 +147,12 @@ class ATM extends Thread {
     private void menu(String UID) {
         agui.displayPanel("menuPanel");
         agui.menuPanel.add(agui.logoIcon);
+
+        //TODO menu GUI
+        // snelpin opties laten zien (niet pas in withdraw menu)
+        // welkomsttekst niet meer getimed scherm maken maar bovenin het menu laten zien
+        // User story: Als een gebruiker wil ik een gebruikersvriendelijke User Interface hebben, zodat ik gemakkelijk kan pinnen.
+
         while (true) {
             //Set up the variables and get the transactionID from the database
             Thread.yield();
@@ -295,7 +301,8 @@ class ATM extends Thread {
         if (amount >= 50) bilAmountFifty = amount / 50;
         billAmountTen = (amount - bilAmountFifty * 50) / 10;
 
-        //todo maximum pinbaar bedrag
+        //TODO maximum pinbaar bedrag
+        // (deze sprint)
 
         if (amount - (bilAmountFifty * 50) - (billAmountTen * 10) != 0 || amount == 0) {
             //ongeldig bedrag ingevoerd (geen tiental of 0)
@@ -314,7 +321,8 @@ class ATM extends Thread {
             receipt(UID, amount);
         }
 
-        //todo error scherm niet genoeg biljetten aanwezig (volgende sprint)
+        //TODO error scherm niet genoeg biljetten aanwezig (volgende sprint)
+        // User Story: Als een gebruiker wil rekening houden met welke biljetten nog beschikbaar zijn, zodat ik kan weten hoeveel geld ik kan pinnen.
     }
 
     private void invalidAmount(String UID, int amount) {
@@ -413,6 +421,8 @@ class ATM extends Thread {
     }
 
     private void debtError() {
+        //TODO debt scherm niet meer getimed maken maar een scherm met back/abort button
+        // User story: Als een gebruiker wil ik een gebruikersvriendelijke User Interface hebben, zodat ik gemakkelijk kan pinnen.
         agui.displayPanel("debtErrorPanel");
         agui.debtErrorPanel.add(agui.logoIcon);
         try {
