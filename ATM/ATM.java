@@ -78,7 +78,6 @@ class ATM extends Thread {
 
         attempts = 0;
         while (true) {
-            //todo niet meer dan 4 digits in kunnen voeren
             Thread.yield();
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
@@ -233,14 +232,13 @@ class ATM extends Thread {
         Thread.yield();
         pinAmount = null;
         while (true) {
-            //todo niet meer dan 3 digits kunnen invoeren
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 if (!keypadInput.equals("A") && !keypadInput.equals("B") && !keypadInput.equals("C") && !keypadInput.equals("D") && !keypadInput.equals("*") && !keypadInput.equals("#")) {
                     if (pinAmount == null) {
                         pinAmount = keypadInput;
                         agui.withdrawAmountCustom.setText("€" + pinAmount);
-                    } else {
+                    } else if (pinAmount.length() < 3){
                         pinAmount = pinAmount + keypadInput;
                         agui.withdrawAmountCustom.setText(agui.withdrawAmountCustom.getText() + keypadInput);
                     }
