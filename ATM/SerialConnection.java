@@ -23,13 +23,6 @@ public class SerialConnection {
                 byte[] newData = new byte[comPort.bytesAvailable()]; //receive incoming bytes
                 comPort.readBytes(newData, newData.length); //read incoming bytes
                 input = new String(newData); //convert bytes to string
-
-//                System.out.println(input);
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
             }
         });
     }
