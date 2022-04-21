@@ -141,8 +141,7 @@ void printReceipt() {
   printer.println(("- - - - - - - - - - - - - - - -"));   // LINE
 
   printer.println(addSpaces("IBAN :", "XXXX XXXX " + IBAN));  // IBAN Number shows only last 4
-  printer.println(addSpaces("Amount : €", amount));  // Amount printed
-  printer.println(addSpaces("Transaction# :", "14260"));   // transaction ID
+  printer.println(addSpaces("Amount :", amount));  // Amount printed
 
   printer.println("- - - - - - - - - - - - - - - -");   // line
 
