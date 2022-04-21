@@ -13,7 +13,7 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 #define RX_PIN 11 // Arduino receive   GREEN WIRE   labeled TX on printer
 
 #define mBoven 13
-#define mBeneden 11
+#define mBeneden 12
 
 SoftwareSerial mySerial(RX_PIN, TX_PIN); // Declare SoftwareSerial obj first
 Adafruit_Thermal printer(&mySerial);
