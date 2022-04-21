@@ -78,6 +78,7 @@ class ATM extends Thread {
 
         attempts = 0;
         while (true) {
+            //todo niet meer dan 4 digits in kunnen voeren
             Thread.yield();
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
@@ -196,13 +197,13 @@ class ATM extends Thread {
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                    //If A is pressed withdraw €10
+                    //If A is pressed withdraw €20
                     case "A":
-                        withdraw(UID, 10);
-                        break;
-                    //If B is pressed withdraw €20
-                    case "B":
                         withdraw(UID, 20);
+                        break;
+                    //If B is pressed withdraw €50
+                    case "B":
+                        withdraw(UID, 50);
                         break;
                     //If C is pressed withdraw €100
                     case "C":
@@ -229,6 +230,7 @@ class ATM extends Thread {
         Thread.yield();
         pinAmount = null;
         while (true) {
+            //todo niet meer dan 3 digits kunnen invoeren
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 if (!keypadInput.equals("A") && !keypadInput.equals("B") && !keypadInput.equals("C") && !keypadInput.equals("D") && !keypadInput.equals("*") && !keypadInput.equals("#")) {
@@ -250,13 +252,6 @@ class ATM extends Thread {
     }
 
     private void withdraw(String UID, int amount) {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } // weghalen
-
-
         // Check of er genoeg saldo is
         if (!checkSufficientBalance(UID, amount)) {
             agui.displayPanel("withdrawInsufOptionsPanel");
