@@ -282,6 +282,9 @@ class ATM extends Thread {
         //TODO maximum pinbaar bedrag
         // (deze sprint)
 
+        if (amount > 300) {
+            //todo limietpanel
+        }
         if (amount - (bilAmountFifty * 50) - (billAmountTen * 10) != 0 || amount == 0) {
             //ongeldig bedrag ingevoerd (geen tiental of 0)
             invalidAmount(UID, amount);
@@ -306,14 +309,14 @@ class ATM extends Thread {
     private void invalidAmount(String UID, int amount) {
         agui.displayPanel("withdrawProcessScreen");
         agui.withdrawProcessScreen.add(agui.logoIcon);
-        agui.withdrawStatusMessage.setText("€" + amount + " not a valid amount.");
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            Thread.sleep(3000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
 
         if (amount == 0) {
+            //todo geen timed scherm
             agui.displayPanel("withdrawProcessScreen");
             agui.withdrawProcessScreen.add(agui.logoIcon);
             agui.withdrawStatusMessage.setText("€" + amount + " not a valid amount.");
@@ -330,6 +333,7 @@ class ATM extends Thread {
         }
         agui.displayPanel("withdrawSuggestionPanel");
         agui.withdrawSuggestionPanel.add(agui.logoIcon);
+        agui.withdrawError.setText("€" + amount + " not a valid amount.");
         agui.withdrawSuggestionText2.setText("€" + amountRounded + " instead?");
         //ander bedrag suggestie opties scherm
         while (true) {
