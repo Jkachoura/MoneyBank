@@ -54,6 +54,12 @@ public class ATMGUI extends JFrame {
     public JLabel withdrawSuggestionText = new JLabel("Would you like to withdraw");
     public JLabel withdrawSuggestionText2;
 
+    //Withdraw exceeds limit screen
+    public JPanel withdrawLimitPanel;
+    public JLabel withdrawLimitText = new JLabel("");
+    public JLabel withdrawLimitText2 = new JLabel("Would you like to withdraw");
+    public JLabel withdrawLimitText3 = new JLabel("€300 instead?");
+
     //printing money Screen
     public JPanel printingPanel;
     public JLabel printingMoney = new JLabel("");
@@ -612,6 +618,64 @@ public class ATMGUI extends JFrame {
         withdrawSuggestionText2.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
         withdrawSuggestionText2.setBounds(0, 100, 1382, 864);
         withdrawSuggestionPanel.add(withdrawSuggestionText2);
+
+        //Withdraw exceeds limit panel
+        withdrawLimitPanel = new JPanel();
+        withdrawLimitPanel.setLayout(null);
+        withdrawLimitPanel.setBackground(Color.decode("#15202B"));
+        Windows.add(withdrawLimitPanel, "withdrawLimitPanel");
+
+        JLabel dLabelWLim = new JLabel("D", SwingConstants.CENTER);
+        dLabelWLim.setOpaque(true);
+        dLabelWLim.setForeground(Color.decode("#FFFFFF"));
+        dLabelWLim.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        dLabelWLim.setBackground(Color.decode("#22303C"));
+        dLabelWLim.setBounds(1250, 700, 50, 75);
+        withdrawLimitPanel.add(dLabelWLim);
+
+        JLabel starLabelWLim = new JLabel("*", SwingConstants.CENTER);
+        starLabelWLim.setVerticalAlignment(SwingConstants.BOTTOM);
+        starLabelWLim.setOpaque(true);
+        starLabelWLim.setForeground(Color.decode("#FFFFFF"));
+        starLabelWLim.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        starLabelWLim.setBackground(Color.decode("#22303C"));
+        starLabelWLim.setBounds(75, 700, 50, 75);
+        withdrawLimitPanel.add(starLabelWLim);
+
+        JButton yesButttonWLim = new JButton("Yes");
+        yesButttonWLim.setForeground(Color.WHITE);
+        yesButttonWLim.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        yesButttonWLim.setFocusPainted(false);
+        yesButttonWLim.setBackground(Color.decode("#018786"));
+        yesButttonWLim.setBounds(1100, 700, 150, 75);
+        withdrawLimitPanel.add(yesButttonWLim);
+
+        JButton noButtonWLim = new JButton("No");
+        noButtonWLim.setForeground(Color.WHITE);
+        noButtonWLim.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        noButtonWLim.setFocusPainted(false);
+        noButtonWLim.setBackground(Color.decode("#B00020"));
+        noButtonWLim.setBounds(125, 700, 150, 75);
+        withdrawLimitPanel.add(noButtonWLim);
+
+        withdrawLimitText.setHorizontalAlignment(JLabel.CENTER);
+        withdrawLimitText.setVerticalAlignment(JLabel.CENTER);
+        withdrawLimitText.setFont(new Font("Circular Std Bold", Font.PLAIN, 75));
+        withdrawLimitText.setForeground(Color.decode("#8899A6"));
+        withdrawLimitText.setBounds(0, -250, 1382, 864);
+        withdrawLimitPanel.add(withdrawLimitText);
+
+        withdrawLimitText2.setForeground(Color.decode("#FFFFFF"));
+        withdrawLimitText2.setHorizontalAlignment(SwingConstants.CENTER);
+        withdrawLimitText2.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
+        withdrawLimitText2.setBounds(0, -50, 1382, 864);
+        withdrawLimitPanel.add(withdrawLimitText2);
+
+        withdrawLimitText3.setForeground(Color.decode("#FFFFFF"));
+        withdrawLimitText3.setHorizontalAlignment(SwingConstants.CENTER);
+        withdrawLimitText3.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
+        withdrawLimitText3.setBounds(0, 100, 1382, 864);
+        withdrawLimitPanel.add(withdrawLimitText3);
 
         // Printing panel
         printingPanel = new JPanel();
