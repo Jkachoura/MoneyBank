@@ -37,6 +37,7 @@ public class ATMGUI extends JFrame {
 
     //Withdraw okay/ error screen
     public JPanel withdrawProcessScreen;
+    public JLabel withdrawError = new JLabel("");
     public JLabel withdrawStatusMessage = new JLabel("");
 
     //Withdraw custom amount screen
@@ -542,6 +543,13 @@ public class ATMGUI extends JFrame {
         withdrawSuggestionPanel.setLayout(null);
         withdrawSuggestionPanel.setBackground(Color.decode("#15202B"));
         Windows.add(withdrawSuggestionPanel, "withdrawSuggestionPanel");
+
+        withdrawError.setHorizontalAlignment(JLabel.CENTER);
+        withdrawError.setVerticalAlignment(JLabel.CENTER);
+        withdrawError.setFont(new Font("Circular Std Bold", Font.PLAIN, 75));
+        withdrawError.setForeground(Color.decode("#8899A6"));
+        withdrawError.setBounds(0, -250, 1382, 864);
+        withdrawSuggestionPanel.add(withdrawError);
 
         JLabel dLabelWSug = new JLabel("D", SwingConstants.CENTER);
         dLabelWSug.setOpaque(true);
