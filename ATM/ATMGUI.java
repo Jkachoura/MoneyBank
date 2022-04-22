@@ -26,6 +26,7 @@ public class ATMGUI extends JFrame {
 
     //Menu screen
     public JPanel menuPanel;
+    public JLabel welcomeMenu = new JLabel("Welcome to Money Bank!");
 
     //Balance screen
     public JPanel BalancePanel;
@@ -82,7 +83,7 @@ public class ATMGUI extends JFrame {
     public ATMGUI() {
         setContentPane(screenPanel);
         setResizable(false);
-        setAlwaysOnTop(false);
+        setAlwaysOnTop(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1383, 864);
         setUndecorated(true);
@@ -210,12 +211,19 @@ public class ATMGUI extends JFrame {
         menuPanel.setBackground(Color.decode("#15202B"));
         Windows.add(menuPanel, "menuPanel");
 
+        welcomeMenu.setHorizontalAlignment(JLabel.CENTER);
+        welcomeMenu.setVerticalAlignment(JLabel.CENTER);
+        welcomeMenu.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
+        welcomeMenu.setForeground(Color.decode("#FFFFFF"));
+        welcomeMenu.setBounds(0, -200, 1382, 864);
+        menuPanel.add(welcomeMenu);
+
         JLabel bLabelMenu = new JLabel("B", SwingConstants.CENTER);
         bLabelMenu.setOpaque(true);
         bLabelMenu.setForeground(Color.decode("#FFFFFF"));
         bLabelMenu.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
         bLabelMenu.setBackground(Color.decode("#22303C"));
-        bLabelMenu.setBounds(741, 357, 50, 75);
+        bLabelMenu.setBounds(741, 397, 50, 75);
         menuPanel.add(bLabelMenu);
 
         JLabel cLabelMenu = new JLabel("C", SwingConstants.CENTER);
@@ -224,7 +232,7 @@ public class ATMGUI extends JFrame {
         cLabelMenu.setForeground(Color.decode("#FFFFFF"));
         cLabelMenu.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
         cLabelMenu.setBackground(Color.decode("#22303C"));
-        cLabelMenu.setBounds(741, 462, 50, 75);
+        cLabelMenu.setBounds(741, 502, 50, 75);
         menuPanel.add(cLabelMenu);
 
         JButton btnBalanceMenu = new JButton("Balance");
@@ -232,7 +240,7 @@ public class ATMGUI extends JFrame {
         btnBalanceMenu.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
         btnBalanceMenu.setFocusPainted(false);
         btnBalanceMenu.setBackground(Color.decode("#22303C"));
-        btnBalanceMenu.setBounds(591, 357, 150, 75);
+        btnBalanceMenu.setBounds(591, 397, 150, 75);
         menuPanel.add(btnBalanceMenu);
 
         JButton btnWithdrawMenu = new JButton("Withdraw");
@@ -240,7 +248,7 @@ public class ATMGUI extends JFrame {
         btnWithdrawMenu.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
         btnWithdrawMenu.setFocusPainted(false);
         btnWithdrawMenu.setBackground(Color.decode("#22303C"));
-        btnWithdrawMenu.setBounds(591, 462, 150, 75);
+        btnWithdrawMenu.setBounds(591, 502, 150, 75);
         menuPanel.add(btnWithdrawMenu);
 
         JLabel starLabelMenu = new JLabel("*", SwingConstants.CENTER);
