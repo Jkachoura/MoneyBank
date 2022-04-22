@@ -779,15 +779,49 @@ public class ATMGUI extends JFrame {
         debtErrorMessage.setVerticalAlignment(JLabel.CENTER);
         debtErrorMessage.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
         debtErrorMessage.setForeground(Color.decode("#FFFFFF"));
-        debtErrorMessage.setBounds(0, 150, 1382, 864);
+        debtErrorMessage.setBounds(0, 100, 1382, 864);
         debtErrorPanel.add(debtErrorMessage);
 
         debtErrorMessage2.setHorizontalAlignment(JLabel.CENTER);
         debtErrorMessage2.setVerticalAlignment(JLabel.CENTER);
         debtErrorMessage2.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
         debtErrorMessage2.setForeground(Color.decode("#FFFFFF"));
-        debtErrorMessage2.setBounds(0, -50, 1382, 864);
+        debtErrorMessage2.setBounds(0, -100, 1382, 864);
         debtErrorPanel.add(debtErrorMessage2);
+
+        JLabel bLabelDebtError = new JLabel("B", SwingConstants.CENTER);
+        bLabelDebtError.setOpaque(true);
+        bLabelDebtError.setForeground(Color.decode("#FFFFFF"));
+        bLabelDebtError.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        bLabelDebtError.setBackground(Color.decode("#22303C"));
+        bLabelDebtError.setBounds(1257, 700, 50, 75);
+        debtErrorPanel.add(bLabelDebtError);
+
+        JButton btnBalanceDebtError = new JButton("Check your balance");
+        btnBalanceDebtError.setHorizontalAlignment(JButton.CENTER);
+        btnBalanceDebtError.setForeground(Color.WHITE);
+        btnBalanceDebtError.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnBalanceDebtError.setFocusPainted(false);
+        btnBalanceDebtError.setBackground(Color.decode("#22303C"));
+        btnBalanceDebtError.setBounds(957, 700, 300, 75);
+        debtErrorPanel.add(btnBalanceDebtError);
+
+        JLabel starLabelDebtError = new JLabel("*", SwingConstants.CENTER);
+        starLabelDebtError.setVerticalAlignment(SwingConstants.BOTTOM);
+        starLabelDebtError.setOpaque(true);
+        starLabelDebtError.setForeground(Color.decode("#FFFFFF"));
+        starLabelDebtError.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        starLabelDebtError.setBackground(Color.decode("#22303C"));
+        starLabelDebtError.setBounds(75, 700, 50, 75);
+        debtErrorPanel.add(starLabelDebtError);
+
+        JButton btnAbortDebtError = new JButton("Abort");
+        btnAbortDebtError.setForeground(Color.WHITE);
+        btnAbortDebtError.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnAbortDebtError.setFocusPainted(false);
+        btnAbortDebtError.setBackground(Color.decode("#B00020"));
+        btnAbortDebtError.setBounds(125, 700, 150, 75);
+        debtErrorPanel.add(btnAbortDebtError);
 
         setVisible(true);
     }
