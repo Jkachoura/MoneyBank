@@ -140,8 +140,8 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If D is pressed
                     case"A":
-                    withdraw(UID, 70);
-                    break;
+                        withdraw(UID, 70);
+                        break;
                     case "B":
                         balance(UID);
                         break;
