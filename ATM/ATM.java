@@ -137,7 +137,7 @@ class ATM extends Thread {
                     //If D is pressed
                     case "A":
                         if (checkIfDebt(UID)) {
-                            debtError();
+                            debtError(UID);
                             menu(UID);
                         } else {
                             withdraw(UID, 70);
@@ -177,7 +177,7 @@ class ATM extends Thread {
 
     private void withdrawMenu(String UID) {
         if (checkIfDebt(UID)) {
-            debtError();
+            debtError(UID);
             menu(UID);
         }
         agui.displayPanel("withdrawMenuPanel");
@@ -416,15 +416,25 @@ class ATM extends Thread {
         scanCard();
     }
 
-    private void debtError() {
-        //TODO debt scherm niet meer getimed maken maar een scherm met back/abort button
-        // User story: Als een gebruiker wil ik een gebruikersvriendelijke User Interface hebben, zodat ik gemakkelijk kan pinnen.
+    private void debtError(String UID) {
         agui.displayPanel("debtErrorPanel");
         agui.debtErrorPanel.add(agui.logoIcon);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        while (true) {
+            //niet genoeg saldo opties
+            Thread.yield();
+            keypadInput = keypad.getInput();
+            if (keypadInput != null) {
+                switch (keypadInput) {
+                    //If B is pressed check balance
+                    case "B":
+                        balance(UID);
+                        break;
+                    //If * is abort transaction
+                    case "*":
+                        thanks();
+                        break;
+                }
+            }
         }
     }
 
