@@ -135,8 +135,13 @@ class ATM extends Thread {
             if (keypadInput != null) {
                 switch (keypadInput) {
                     //If D is pressed
-                    case"A":
-                        withdraw(UID, 70);
+                    case "A":
+                        if (checkIfDebt(UID)) {
+                            debtError();
+                            menu(UID);
+                        } else {
+                            withdraw(UID, 70);
+                        }
                         break;
                     case "B":
                         balance(UID);
@@ -173,11 +178,6 @@ class ATM extends Thread {
     private void withdrawMenu(String UID) {
         if (checkIfDebt(UID)) {
             debtError();
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             menu(UID);
         }
         agui.displayPanel("withdrawMenuPanel");
