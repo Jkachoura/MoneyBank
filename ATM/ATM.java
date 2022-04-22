@@ -127,10 +127,6 @@ class ATM extends Thread {
         agui.displayPanel("menuPanel");
         agui.menuPanel.add(agui.logoIcon);
 
-        //TODO menu GUI
-        // snelpin opties laten zien (niet pas in withdraw menu)
-        // User story: Als een gebruiker wil ik een gebruikersvriendelijke User Interface hebben, zodat ik gemakkelijk kan pinnen.
-
         while (true) {
             //Set up the variables and get the transactionID from the database
             Thread.yield();
@@ -282,11 +278,8 @@ class ATM extends Thread {
         if (amount >= 50) bilAmountFifty = amount / 50;
         billAmountTen = (amount - bilAmountFifty * 50) / 10;
 
-        //TODO maximum pinbaar bedrag
-        // (deze sprint)
-
         if (amount > 300) {
-            //todo limietpanel
+            exceedsLimit(UID, amount);
         }
         if (amount - (bilAmountFifty * 50) - (billAmountTen * 10) != 0 || amount == 0) {
             //ongeldig bedrag ingevoerd (geen tiental of 0)
@@ -312,11 +305,6 @@ class ATM extends Thread {
     private void invalidAmount(String UID, int amount) {
         agui.displayPanel("withdrawProcessScreen");
         agui.withdrawProcessScreen.add(agui.logoIcon);
-//        try {
-//            Thread.sleep(3000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
 
         if (amount == 0) {
             //todo geen timed scherm
@@ -351,6 +339,29 @@ class ATM extends Thread {
                     //If D is pressed withdraw the suggested amount
                     case "D":
                         withdraw(UID, amountRounded);
+                        break;
+                }
+            }
+        }
+    }
+
+    private void exceedsLimit(String UID, int amount) {
+        agui.displayPanel("withdrawLimitPanel");
+        agui.withdrawLimitPanel.add(agui.logoIcon);
+        agui.withdrawLimitText.setText("€" + amount + " exceeds limit.");
+
+        while (true) {
+            Thread.yield();
+            keypadInput = keypad.getInput();
+            if (keypadInput != null) {
+                switch (keypadInput) {
+                    //If * is pressed go back to withdraw men
+                    case "*":
+                        withdrawMenu(UID);
+                        break;
+                    //If D is pressed withdraw the suggested amount
+                    case "D":
+                        withdraw(UID, 300);
                         break;
                 }
             }
