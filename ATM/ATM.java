@@ -71,13 +71,6 @@ class ATM extends Thread {
         agui.pinMessage.setText("");
         agui.displayPanel("pincodePanel");
 
-        agui.dLabelPin.setVisible(true);
-        agui.btnYesPin.setVisible(true);
-        agui.starLabelPin.setVisible(true);
-        agui.hashLabelPin.setVisible(true);
-        agui.btnDeletePin.setVisible(true);
-        agui.btnAbortPin.setVisible(true);
-
         attempts = 0;
         while (true) {
             Thread.yield();
@@ -107,20 +100,6 @@ class ATM extends Thread {
                     }
 
                     if (pincode.equals(correctPin)) {
-                        agui.dLabelPin.setVisible(false);
-                        agui.btnYesPin.setVisible(false);
-                        agui.starLabelPin.setVisible(false);
-                        agui.hashLabelPin.setVisible(false);
-                        agui.btnDeletePin.setVisible(false);
-                        agui.btnAbortPin.setVisible(false);
-
-                        agui.enterPin.setText("Welcome to Money Bank!");
-                        agui.pinMessage.setText(" ");
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                         menu(UID);
                     } else if (attempts != 2) {
                         agui.enterPin.setText("Wrong pincode. Try again");
@@ -150,7 +129,6 @@ class ATM extends Thread {
 
         //TODO menu GUI
         // snelpin opties laten zien (niet pas in withdraw menu)
-        // welkomsttekst niet meer getimed scherm maken maar bovenin het menu laten zien
         // User story: Als een gebruiker wil ik een gebruikersvriendelijke User Interface hebben, zodat ik gemakkelijk kan pinnen.
 
         while (true) {
