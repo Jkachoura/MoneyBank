@@ -24,6 +24,8 @@ class ATM extends Thread {
     private String balance;
 
     private String availableBills;
+    private int availableTens;
+    private int availableFifties;
 
     private int printingSleep;
 
@@ -34,9 +36,9 @@ class ATM extends Thread {
     }
 
     public void run() {
-        scanCard();
+//        scanCard();
 //        withdraw("E3F6AB18", 40);
-//        menu("E3F6AB18");
+        menu("E3F6AB18");
     }
 
     private void scanCard() {
@@ -295,35 +297,34 @@ class ATM extends Thread {
             invalidAmount(UID, amount);
         }
         sCon.giveOutput("000000000000000000001" + billAmountTen + bilAmountFifty);
-        while (true) {
-            Thread.yield();
-            if (sCon.getInput() != null) {
-                availableBills = sCon.getInput();
-                if (availableBills.charAt(0) == 'G') {
-                    while (availableBills.length() <= 4) {
-                        sCon.clearInput();
-                        while (sCon.getInput() == null) {
-                            Thread.yield();
-                        }
-                        availableBills = availableBills + sCon.getInput();
-                    }
-                    availableBills = availableBills.substring(0, 5);
-                    break;
+//        readPrintPossible();
+        readBillsAvailable();
+        System.out.println("receivedBillsAvailable : " + availableBills);
+//        System.out.println("received : " + printPossible);
+
+        availableTens = Integer.parseInt(availableBills.substring(1, 3));
+        System.out.println("Available tens: " + availableTens);
+        availableFifties = Integer.parseInt(availableBills.substring(3, 5));
+        System.out.println("Available fifites: " + availableFifties);
+
+        if (billAmountTen > availableTens || bilAmountFifty > availableFifties) {
+            if (amount <= 90 && bilAmountFifty > availableFifties && availableTens > 0) {
+                if ((amount - availableFifties * 50) / 10 <= availableTens) {
+                    sCon.giveOutput("000000000000000000001" + (amount - availableFifties * 50) / 10 + availableFifties);
+                    printing(UID, amount);
                 }
-                sCon.clearInput();
             }
-        }
-//        System.out.println("received : " + availableBills);
-        if (availableBills.charAt(1) == '0' || availableBills.charAt(2) == '0') {
             agui.displayPanel("insufBillsPanel");
             agui.insufBillsPanel.add(agui.logoIcon);
-            if (availableBills.charAt(1) == '0' && availableBills.charAt(2) == '0') {
+            if (billAmountTen > availableTens && bilAmountFifty > availableFifties) {
                 agui.insufBills2.setText("Not enough €10 & €50 bills");
-            } else if (availableBills.charAt(1) == '0') {
+            } else if (billAmountTen > availableTens) {
                 agui.insufBills2.setText("Not enough €10 bills");
-            } else if (availableBills.charAt(2) == '0') {
+            } else if (bilAmountFifty > availableFifties) {
                 agui.insufBills2.setText("Not enough €50 bills");
             }
+            //TODO print integers als 2 cijfers sturen zodat er meer dan 10 biljetten geprint kunnen worden
+
             while (true) {
                 //niet genoeg saldo opties
                 Thread.yield();
@@ -343,20 +344,8 @@ class ATM extends Thread {
                 }
             }
         } else {
-            agui.displayPanel("printingPanel");
-            agui.printingPanel.add(agui.logoIcon);
-            agui.printingMoney.setText("Printing " + "€" + amount);
-            editBalance(UID, amount);
-            printingSleep = (billAmountTen + bilAmountFifty) * 1200;
-            try {
-                Thread.sleep(printingSleep);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            receipt(UID, amount);
+            printing(UID, amount);
         }
-        //TODO berekeningen voor wanneer er niet genoeg €50 aanwezig is
-        // User Story: Als een gebruiker wil rekening houden met welke biljetten nog beschikbaar zijn, zodat ik kan weten hoeveel geld ik kan pinnen.
     }
 
     private void invalidAmount(String UID, int amount) {
@@ -430,6 +419,20 @@ class ATM extends Thread {
         }
     }
 
+    private void printing(String UID, int amount) {
+        agui.displayPanel("printingPanel");
+        agui.printingPanel.add(agui.logoIcon);
+        agui.printingMoney.setText("Printing " + "€" + amount);
+        editBalance(UID, amount);
+        printingSleep = (billAmountTen + bilAmountFifty) * 1200;
+        try {
+            Thread.sleep(8000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        receipt(UID, amount);
+    }
+
     private void receipt(String UID, int amount) {
         agui.displayPanel("receiptPanel");
         agui.receiptPanel.add(agui.logoIcon);
@@ -496,6 +499,27 @@ class ATM extends Thread {
                         thanks();
                         break;
                 }
+            }
+        }
+    }
+
+    private void readBillsAvailable() {
+        while (true) {
+            Thread.yield();
+            if (sCon.getInput() != null) {
+                availableBills = sCon.getInput();
+                if (availableBills.charAt(0) == 'B') {
+                    while (availableBills.length() < 6) {
+                        sCon.clearInput();
+                        while (sCon.getInput() == null) {
+                            Thread.yield();
+                        }
+                        availableBills = availableBills + sCon.getInput();
+                    }
+                    availableBills = availableBills.substring(0, 6);
+                    break;
+                }
+                sCon.clearInput();
             }
         }
     }
