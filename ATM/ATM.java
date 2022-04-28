@@ -23,6 +23,10 @@ class ATM extends Thread {
 
     private String balance;
 
+    private String availableBills;
+
+    private int printingSleep;
+
     public ATM() {
         sCon = new SerialConnection();
         agui = new ATMGUI();
@@ -32,6 +36,7 @@ class ATM extends Thread {
     public void run() {
         scanCard();
 //        withdraw("E3F6AB18", 40);
+//        menu("E3F6AB18");
     }
 
     private void scanCard() {
@@ -275,7 +280,11 @@ class ATM extends Thread {
         }
 
         //bereken hoeveel biljetten nodig zijn
-        if (amount >= 50) bilAmountFifty = amount / 50;
+        if (amount >= 50) {
+            bilAmountFifty = amount / 50;
+        } else {
+            bilAmountFifty = 0;
+        }
         billAmountTen = (amount - bilAmountFifty * 50) / 10;
 
         if (amount > 300) {
@@ -284,21 +293,69 @@ class ATM extends Thread {
         if (amount - (bilAmountFifty * 50) - (billAmountTen * 10) != 0 || amount == 0) {
             //ongeldig bedrag ingevoerd (geen tiental of 0)
             invalidAmount(UID, amount);
+        }
+        sCon.giveOutput("000000000000000000001" + billAmountTen + bilAmountFifty);
+        while (true) {
+            Thread.yield();
+            if (sCon.getInput() != null) {
+                availableBills = sCon.getInput();
+                if (availableBills.charAt(0) == 'G') {
+                    while (availableBills.length() <= 4) {
+                        sCon.clearInput();
+                        while (sCon.getInput() == null) {
+                            Thread.yield();
+                        }
+                        availableBills = availableBills + sCon.getInput();
+                    }
+                    availableBills = availableBills.substring(0, 5);
+                    break;
+                }
+                sCon.clearInput();
+            }
+        }
+//        System.out.println("received : " + availableBills);
+        if (availableBills.charAt(1) == '0' || availableBills.charAt(2) == '0') {
+            agui.displayPanel("insufBillsPanel");
+            agui.insufBillsPanel.add(agui.logoIcon);
+            if (availableBills.charAt(1) == '0' && availableBills.charAt(2) == '0') {
+                agui.insufBills2.setText("Not enough €10 & €50 bills");
+            } else if (availableBills.charAt(1) == '0') {
+                agui.insufBills2.setText("Not enough €10 bills");
+            } else if (availableBills.charAt(2) == '0') {
+                agui.insufBills2.setText("Not enough €50 bills");
+            }
+            while (true) {
+                //niet genoeg saldo opties
+                Thread.yield();
+                keypadInput = keypad.getInput();
+                if (keypadInput != null) {
+                    switch (keypadInput) {
+                        //If C is pressed enter custom amount
+                        case "C":
+                            withdrawCustomAmount(UID);
+                            break;
+                        //If * is abort transaction
+                        case "*":
+                            thanks();
+                            break;
+
+                    }
+                }
+            }
         } else {
             agui.displayPanel("printingPanel");
             agui.printingPanel.add(agui.logoIcon);
             agui.printingMoney.setText("Printing " + "€" + amount);
             editBalance(UID, amount);
-            sCon.giveOutput("000000000000000000001" + billAmountTen + bilAmountFifty);
+            printingSleep = (billAmountTen + bilAmountFifty) * 1200;
             try {
-                Thread.sleep(6000);
+                Thread.sleep(printingSleep);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
             receipt(UID, amount);
         }
-
-        //TODO error scherm niet genoeg biljetten aanwezig (volgende sprint)
+        //TODO berekeningen voor wanneer er niet genoeg €50 aanwezig is
         // User Story: Als een gebruiker wil rekening houden met welke biljetten nog beschikbaar zijn, zodat ik kan weten hoeveel geld ik kan pinnen.
     }
 
