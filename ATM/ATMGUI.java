@@ -60,6 +60,11 @@ public class ATMGUI extends JFrame {
     public JLabel withdrawLimitText2 = new JLabel("Would you like to withdraw");
     public JLabel withdrawLimitText3 = new JLabel("€300 instead?");
 
+    //Insufficient Bills screen
+    public JPanel insufBillsPanel;
+    private JLabel insufBills = new JLabel("Insufficient bills available.");
+    public JLabel insufBills2 = new JLabel("");
+
     //printing money Screen
     public JPanel printingPanel;
     public JLabel printingMoney = new JLabel("");
@@ -694,6 +699,62 @@ public class ATMGUI extends JFrame {
         withdrawLimitText3.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
         withdrawLimitText3.setBounds(0, 100, 1382, 864);
         withdrawLimitPanel.add(withdrawLimitText3);
+
+        // Insufficient bills available panel
+        insufBillsPanel = new JPanel();
+        insufBillsPanel.setLayout(null);
+        insufBillsPanel.setBackground(Color.decode("#15202B"));
+        Windows.add(insufBillsPanel, "insufBillsPanel");
+
+        insufBills.setHorizontalAlignment(JLabel.CENTER);
+        insufBills.setVerticalAlignment(JLabel.CENTER);
+        insufBills.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
+        insufBills.setForeground(Color.decode("#FFFFFF"));
+        insufBills.setBounds(0, 0, 1382, 864);
+        insufBillsPanel.add(insufBills);
+
+        insufBills2.setHorizontalAlignment(JLabel.CENTER);
+        insufBills2.setVerticalAlignment(JLabel.CENTER);
+        insufBills2.setFont(new Font("Circular Std Bold", Font.PLAIN, 60));
+        insufBills2.setForeground(Color.decode("#FFFFFF"));
+        insufBills2.setBounds(0, 150, 1382, 864);
+        insufBillsPanel.add(insufBills2);
+
+        JLabel cLabelinsufBills = new JLabel("C", SwingConstants.CENTER);
+        cLabelinsufBills.setVerticalAlignment(SwingConstants.BOTTOM);
+        cLabelinsufBills.setOpaque(true);
+        cLabelinsufBills.setForeground(Color.decode("#FFFFFF"));
+        cLabelinsufBills.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        cLabelinsufBills.setBackground(Color.decode("#22303C"));
+        cLabelinsufBills.setBounds(1257, 700, 50, 75);
+        insufBillsPanel.add(cLabelinsufBills);
+
+        JButton btnWithdrawinsufBills = new JButton("Enter different amount");
+        btnWithdrawinsufBills.setForeground(Color.WHITE);
+        btnWithdrawinsufBills.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnWithdrawinsufBills.setFocusPainted(false);
+        btnWithdrawinsufBills.setBackground(Color.decode("#22303C"));
+        btnWithdrawinsufBills.setBounds(957, 700, 300, 75);
+        insufBillsPanel.add(btnWithdrawinsufBills);
+
+        JLabel starLabelinsufBills = new JLabel("*", SwingConstants.CENTER);
+        starLabelinsufBills.setVerticalAlignment(SwingConstants.BOTTOM);
+        starLabelinsufBills.setOpaque(true);
+        starLabelinsufBills.setForeground(Color.decode("#FFFFFF"));
+        starLabelinsufBills.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        starLabelinsufBills.setBackground(Color.decode("#22303C"));
+        starLabelinsufBills.setBounds(75, 700, 50, 75);
+        insufBillsPanel.add(starLabelinsufBills);
+
+        JButton btnAbortinsufBills = new JButton("Cancel transaction");
+        btnAbortinsufBills.setForeground(Color.WHITE);
+        btnAbortinsufBills.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnAbortinsufBills.setFocusPainted(false);
+        btnAbortinsufBills.setBackground(Color.decode("#B00020"));
+        btnAbortinsufBills.setBounds(125, 700, 280, 75);
+        insufBillsPanel.add(btnAbortinsufBills);
+
+
 
         // Printing panel
         printingPanel = new JPanel();
