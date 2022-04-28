@@ -307,16 +307,21 @@ class ATM extends Thread {
         agui.withdrawProcessScreen.add(agui.logoIcon);
 
         if (amount == 0) {
-            //todo geen timed scherm
             agui.displayPanel("withdrawProcessScreen");
             agui.withdrawProcessScreen.add(agui.logoIcon);
             agui.withdrawStatusMessage.setText("€" + amount + " not a valid amount.");
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+
+            while (true) {
+                //niet genoeg saldo opties
+                Thread.yield();
+                keypadInput = keypad.getInput();
+                if (keypadInput != null) {
+                    //If * is pressed go back to withdraw menu
+                    if ("*".equals(keypadInput)) {
+                        withdrawCustomAmount(UID);
+                    }
+                }
             }
-            withdrawCustomAmount(UID);
         } else if (amount < 10) {
             amountRounded = 10;
         } else {
