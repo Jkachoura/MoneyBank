@@ -75,6 +75,7 @@ public class ATMGUI extends JFrame {
     //Blocked card screen
     public JPanel blockedCardPanel;
     private JLabel thisCardBlocked = new JLabel("This card is blocked");
+    private JLabel contactMessage = new JLabel("Contact the helpdesk : +316 26884950");
 
     //Debt error screen
     public JPanel debtErrorPanel;
@@ -90,7 +91,7 @@ public class ATMGUI extends JFrame {
     public ATMGUI() {
         setContentPane(screenPanel);
         setResizable(false);
-        setAlwaysOnTop(true);
+        setAlwaysOnTop(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1383, 864);
         setUndecorated(true);
@@ -495,6 +496,23 @@ public class ATMGUI extends JFrame {
         withdrawStatusMessage.setBounds(0, 0, 1382, 864);
         withdrawProcessScreen.add(withdrawStatusMessage);
 
+        JLabel starLabelWP = new JLabel("*", SwingConstants.CENTER);
+        starLabelWP.setVerticalAlignment(SwingConstants.BOTTOM);
+        starLabelWP.setOpaque(true);
+        starLabelWP.setForeground(Color.decode("#FFFFFF"));
+        starLabelWP.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        starLabelWP.setBackground(Color.decode("#22303C"));
+        starLabelWP.setBounds(75, 700, 50, 75);
+        withdrawProcessScreen.add(starLabelWP);
+
+        JButton btnBackWP = new JButton("Back");
+        btnBackWP.setForeground(Color.WHITE);
+        btnBackWP.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnBackWP.setFocusPainted(false);
+        btnBackWP.setBackground(Color.decode("#B00020"));
+        btnBackWP.setBounds(125, 700, 150, 75);
+        withdrawProcessScreen.add(btnBackWP);
+
 
         //Withdraw Insufficient Balance Options screen
         withdrawInsufOptionsPanel = new JPanel();
@@ -767,6 +785,13 @@ public class ATMGUI extends JFrame {
         thisCardBlocked.setForeground(Color.decode("#FFFFFF"));
         thisCardBlocked.setBounds(0, 0, 1382, 864);
         blockedCardPanel.add(thisCardBlocked);
+
+        contactMessage.setHorizontalAlignment(JLabel.CENTER);
+        contactMessage.setVerticalAlignment(JLabel.CENTER);
+        contactMessage.setFont(new Font("Circular Std Bold", Font.PLAIN, 60));
+        contactMessage.setForeground(Color.decode("#FFFFFF"));
+        contactMessage.setBounds(0, 250, 1382, 864);
+        blockedCardPanel.add(contactMessage);
 
 
         //Debt Error screen
