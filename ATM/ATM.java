@@ -436,6 +436,7 @@ class ATM extends Thread {
     }
 
     private void receipt(String UID, int amount) {
+        //TODO arduino code witruimte toevoegen aan bonlayout (feed lines)
         agui.displayPanel("receiptPanel");
         agui.receiptPanel.add(agui.logoIcon);
         while (true) {
