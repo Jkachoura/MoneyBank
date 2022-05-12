@@ -36,9 +36,9 @@ class ATM extends Thread {
     }
 
     public void run() {
-//        scanCard();
+        scanCard();
 //        withdraw("E3F6AB18", 40);
-        menu("E3F6AB18");
+//        menu("E3F6AB18");
     }
 
     private void scanCard() {
@@ -141,13 +141,14 @@ class ATM extends Thread {
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                    //If D is pressed
+                    //If A is pressed
                     case "A":
                         if (checkIfDebt(UID)) {
                             debtError(UID);
                             menu(UID);
                         } else {
                             withdraw(UID, 70);
+                            //TODO bevestiging scherm toevoegen hier (snelkeuze)
                         }
                         break;
                     case "B":
@@ -196,6 +197,7 @@ class ATM extends Thread {
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
+                    //TODO bevestiging scherm toevoegen aan snelkeuzes
                     //If A is pressed withdraw €20
                     case "A":
                         withdraw(UID, 20);
@@ -254,6 +256,7 @@ class ATM extends Thread {
 
     private void withdraw(String UID, int amount) {
         // Check of er genoeg saldo is
+        //TODO biljetkeuze-scherm toevoegen
         if (!checkSufficientBalance(UID, amount)) {
             agui.displayPanel("withdrawInsufOptionsPanel");
             agui.withdrawInsufOptionsPanel.add(agui.logoIcon);
@@ -297,7 +300,6 @@ class ATM extends Thread {
             invalidAmount(UID, amount);
         }
         sCon.giveOutput("000000000000000000001" + billAmountTen + bilAmountFifty);
-//        readPrintPossible();
         readBillsAvailable();
         System.out.println("receivedBillsAvailable : " + availableBills);
 //        System.out.println("received : " + printPossible);
@@ -426,7 +428,7 @@ class ATM extends Thread {
         editBalance(UID, amount);
         printingSleep = (billAmountTen + bilAmountFifty) * 1200;
         try {
-            Thread.sleep(8000);
+            Thread.sleep(printingSleep);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
