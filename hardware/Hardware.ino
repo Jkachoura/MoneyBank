@@ -33,8 +33,8 @@ int attemptCounter;
 
 //Gelddispenser
 String geldData = "";
-int totaal10 = 15;
-int totaal50 = 15;
+int totaal10 = 13;
+int totaal50 = 13;
 int draaiTijd = 1200;
 
 char hexaKeys[ROWS][COLS] = {
@@ -148,7 +148,7 @@ void printReceipt() {
   printer.justify('C');
   printer.println("Money Bank loves you <3");
 
-  printer.feed(4);
+  printer.feed(6);
 
   delay(3000L);
   printer.wake();
@@ -178,21 +178,12 @@ void checkAantal(String geldData) {
   boolean conditie10 = totaal10 >= hoeveelheid10;
   boolean conditie50 = totaal50 >= hoeveelheid50;
 
-  Serial.print("G");
-  if (conditie10) {
-    Serial.print("1");
-  }
-  else if (!conditie10) {
-    Serial.print("0");
-  }
-  if (conditie50) {
-    Serial.print("1");
-  }
-  else if (!conditie50) {
-    Serial.print("0");
-  }
-
-  Serial.println("G");
+  Serial.print("B");
+  if (totaal10 < 10) Serial.print("0");
+  Serial.print(totaal10);
+  if (totaal50 < 10) Serial.print("0");
+  Serial.print(totaal50);
+  Serial.print("B");
 
   if (conditie10 && conditie50) {
     draaiMBoven(hoeveelheid10);
