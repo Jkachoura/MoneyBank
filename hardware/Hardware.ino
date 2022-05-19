@@ -145,12 +145,10 @@ void printReceipt() {
 
   printer.println("- - - - - - - - - - - - - - - -");   // line
 
-  printer.feed(1);
-
   printer.justify('C');
   printer.println("Money Bank loves you <3");
 
-  printer.feed(2);
+  printer.feed(4);
 
   delay(3000L);
   printer.wake();
