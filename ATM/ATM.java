@@ -499,7 +499,7 @@ class ATM extends Thread {
         agui.displayPanel("blockedCardPanel");
         agui.blockedCardPanel.add(agui.logoIcon);
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
