@@ -37,8 +37,9 @@ class ATM extends Thread {
 
     public void run() {
         scanCard();
-//        withdraw("E3F6AB18", 40);
 //        menu("E3F6AB18");
+//        withdrawMenu("E3F6AB18");
+//        receipt("E3F6AB18", 20);
     }
 
     private void scanCard() {
@@ -147,8 +148,7 @@ class ATM extends Thread {
                             debtError(UID);
                             menu(UID);
                         } else {
-                            withdraw(UID, 70);
-                            //TODO bevestiging scherm toevoegen hier (snelkeuze)
+                            withdrawConfirm(UID, 70);
                         }
                         break;
                     case "B":
@@ -197,18 +197,17 @@ class ATM extends Thread {
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                    //TODO bevestiging scherm toevoegen aan snelkeuzes
                     //If A is pressed withdraw €20
                     case "A":
-                        withdraw(UID, 20);
+                        withdrawConfirm(UID, 20);
                         break;
                     //If B is pressed withdraw €50
                     case "B":
-                        withdraw(UID, 50);
+                        withdrawConfirm(UID, 50);
                         break;
                     //If C is pressed withdraw €100
                     case "C":
-                        withdraw(UID, 100);
+                        withdrawConfirm(UID, 100);
                         break;
                     //If D is pressed go to custom withdraw method
                     case "D":
@@ -219,6 +218,29 @@ class ATM extends Thread {
                         menu(UID);
                         break;
 
+                }
+            }
+        }
+    }
+
+    private void withdrawConfirm(String UID, int amount) {
+        agui.displayPanel("withdrawConfirmPanel");
+        agui.withdrawConfirmPanel.add(agui.logoIcon);
+        agui.withdrawConfirmMessage.setText("Are you sure you want to withdraw €" + amount + "?");
+        while (true) {
+            Thread.yield();
+            //Get keypad input
+            keypadInput = keypad.getInput();
+            if (keypadInput != null) {
+                switch (keypadInput) {
+                    //If D is pressed withdraw the amount
+                    case "D":
+                        withdraw(UID, amount);
+                        break;
+                    //If * is pressed don't withdraw the amount
+                    case "*":
+                        menu(UID);
+                        break;
                 }
             }
         }
