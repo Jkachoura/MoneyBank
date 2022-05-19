@@ -22,23 +22,21 @@ void loop() {
     return;
   }
   Serial.setTimeout(20000L);
+  String IBAN = "GL03MNBK12345678";
+  
   byte block = 4;
-//  byte buffr[] = {0x44, 0x65, 0x76, 0x63,
-//                  0x72, 0x61, 0x7a, 0x65,
-//                  0x2e, 0x63, 0x6f, 0x6d,
-//                  0x20, 0x20, 0x20, 0x20
-//                 };
-  byte buffr[] = {0x47, 0x4C, 0x30, 0x33,
-                  0x4D, 0x4E, 0x42, 0x4B,
-                  0x31, 0x32, 0x33, 0x34,
-                  0x35, 0x36, 0x37, 0x38,
-                  0x39, 0x30, 0x20, 0x20
+  byte buffr[] = {IBAN[0], IBAN[1], IBAN[2], IBAN[3],
+                  IBAN[4], IBAN[5], IBAN[6], IBAN[7],
+                  IBAN[8], IBAN[9], IBAN[10], IBAN[11],
+                  IBAN[12], IBAN[13], IBAN[14], IBAN[15],
                  };
+  
   writeBytesToBlock(block, buffr);
   Serial.println(" ");
   mfrc522.PICC_HaltA();
   mfrc522.PCD_StopCrypto1();
 }
+
 void writeBytesToBlock(byte block, byte buff[]) {
   status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, block, &key, &(mfrc522.uid));
   if (status != MFRC522::STATUS_OK) {
