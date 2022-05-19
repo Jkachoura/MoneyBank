@@ -38,7 +38,7 @@ class ATM extends Thread {
     public void run() {
         scanCard();
 //        menu("E3F6AB18");
-//        withdrawMenu("E3F6AB18");
+//        withdrawConfirm("E3F6AB18", 70);
 //        receipt("E3F6AB18", 20);
     }
 
@@ -168,8 +168,8 @@ class ATM extends Thread {
 
     private void balance(String UID) {
         agui.yourBalance.setText("Your balance is: €" + checkBalance(UID));
-        agui.displayPanel("BalancePanel");
-        agui.BalancePanel.add(agui.logoIcon);
+        agui.displayPanel("balancePanel");
+        agui.balancePanel.add(agui.logoIcon);
         while (true) {
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
@@ -324,7 +324,6 @@ class ATM extends Thread {
         sCon.giveOutput("000000000000000000001" + billAmountTen + bilAmountFifty);
         readBillsAvailable();
         System.out.println("receivedBillsAvailable : " + availableBills);
-//        System.out.println("received : " + printPossible);
 
         availableTens = Integer.parseInt(availableBills.substring(1, 3));
         System.out.println("Available tens: " + availableTens);
@@ -458,7 +457,6 @@ class ATM extends Thread {
     }
 
     private void receipt(String UID, int amount) {
-        //TODO arduino code witruimte toevoegen aan bonlayout (feed lines)
         agui.displayPanel("receiptPanel");
         agui.receiptPanel.add(agui.logoIcon);
         while (true) {
