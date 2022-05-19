@@ -9,6 +9,9 @@
 #define RST_PIN 48
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 
+MFRC522::MIFARE_Key key;
+MFRC522::StatusCode status;
+
 #define TX_PIN 10 // Arduino transmit  BLUE WIRE  labeled RX on printer
 #define RX_PIN 11 // Arduino receive   GREEN WIRE   labeled TX on printer
 
@@ -82,6 +85,7 @@ void loop()
   if (withdraw == 1) {
     checkAantal(geldData);
   }
+//  IBANSend();
   UIDSend();
   checkKeyInput();
 }
@@ -112,6 +116,47 @@ void UIDSend() {
   Serial.print("U");
   Serial.println(UIDsend);
   delay(2000);
+}
+
+void IBANSend() {
+  // Prepare key - all keys are set to FFFFFFFFFFFFh at chip delivery from the factory.
+  for (byte i = 0; i < 6; i++) key.keyByte[i] = 0xFF;
+  byte block;
+  byte len;
+  if ( ! mfrc522.PICC_IsNewCardPresent()) {
+    return;
+  }
+  // Select one of the cards
+  if ( ! mfrc522.PICC_ReadCardSerial()) {
+    return;
+  }
+  delay(100);
+  byte buffer1[18];
+  block = 4;
+  len = 18;
+  status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, 4, &key, &(mfrc522.uid));
+  if (status != MFRC522::STATUS_OK) {
+    Serial.print(F("Authentication failed: "));
+    Serial.println(mfrc522.GetStatusCodeName(status));
+    return;
+  }
+  status = mfrc522.MIFARE_Read(block, buffer1, &len);
+  if (status != MFRC522::STATUS_OK) {
+    Serial.print(F("Reading failed: "));
+    Serial.println(mfrc522.GetStatusCodeName(status));
+    return;
+  }
+  String value = "";
+  for (uint8_t i = 0; i < 16; i++)
+  {
+    value += (char)buffer1[i];
+  }
+  value.trim();
+  Serial.print("I");
+  Serial.println(value);
+  delay(1000);
+  mfrc522.PICC_HaltA();
+  mfrc522.PCD_StopCrypto1();
 }
 
 void checkKeyInput() {
