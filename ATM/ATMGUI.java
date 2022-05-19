@@ -40,6 +40,10 @@ public class ATMGUI extends JFrame {
     public JLabel withdrawError = new JLabel("");
     public JLabel withdrawStatusMessage = new JLabel("");
 
+    //Withdraw confirm panel
+    public JPanel withdrawConfirmPanel;
+    public JLabel withdrawConfirmMessage = new JLabel("");
+
     //Withdraw custom amount screen
     public JPanel withdrawPanel;
     public JLabel withdrawMessage = new JLabel("Enter withdraw amount: ");
@@ -96,7 +100,7 @@ public class ATMGUI extends JFrame {
     public ATMGUI() {
         setContentPane(screenPanel);
         setResizable(false);
-        setAlwaysOnTop(false);
+        setAlwaysOnTop(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1383, 864);
         setUndecorated(true);
@@ -416,6 +420,51 @@ public class ATMGUI extends JFrame {
         btnAbortWM.setBackground(Color.decode("#B00020"));
         btnAbortWM.setBounds(125, 700, 150, 75);
         withdrawMenuPanel.add(btnAbortWM);
+
+        //Withdraw Confirm screen
+        withdrawConfirmPanel = new JPanel();
+        withdrawConfirmPanel.setLayout(null);
+        withdrawConfirmPanel.setBackground(Color.decode("#15202B"));
+        Windows.add(withdrawConfirmPanel, "withdrawConfirmPanel");
+
+        JLabel dLabelWConfirm = new JLabel("D", SwingConstants.CENTER);
+        dLabelWConfirm.setOpaque(true);
+        dLabelWConfirm.setForeground(Color.decode("#FFFFFF"));
+        dLabelWConfirm.setFont(new Font("Circular Std Bold", Font.PLAIN, 40));
+        dLabelWConfirm.setBackground(Color.decode("#22303C"));
+        dLabelWConfirm.setBounds(1250, 700, 50, 75);
+        withdrawConfirmPanel.add(dLabelWConfirm);
+
+        JLabel starLabelWConfirm = new JLabel("*", SwingConstants.CENTER);
+        starLabelWConfirm.setVerticalAlignment(SwingConstants.BOTTOM);
+        starLabelWConfirm.setOpaque(true);
+        starLabelWConfirm.setForeground(Color.decode("#FFFFFF"));
+        starLabelWConfirm.setFont(new Font("Circular Std Bold", Font.PLAIN, 50));
+        starLabelWConfirm.setBackground(Color.decode("#22303C"));
+        starLabelWConfirm.setBounds(75, 700, 50, 75);
+        withdrawConfirmPanel.add(starLabelWConfirm);
+
+        JButton btnYesWConfirm = new JButton("Yes");
+        btnYesWConfirm.setForeground(Color.WHITE);
+        btnYesWConfirm.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnYesWConfirm.setFocusPainted(false);
+        btnYesWConfirm.setBackground(Color.decode("#018786"));
+        btnYesWConfirm.setBounds(1100, 700, 150, 75);
+        withdrawConfirmPanel.add(btnYesWConfirm);
+
+        JButton btnNoWConfirm = new JButton("No");
+        btnNoWConfirm.setForeground(Color.WHITE);
+        btnNoWConfirm.setFont(new Font("Circular Std Bold", Font.PLAIN, 25));
+        btnNoWConfirm.setFocusPainted(false);
+        btnNoWConfirm.setBackground(Color.decode("#B00020"));
+        btnNoWConfirm.setBounds(125, 700, 150, 75);
+        withdrawConfirmPanel.add(btnNoWConfirm);
+
+        withdrawConfirmMessage.setForeground(Color.decode("#FFFFFF"));
+        withdrawConfirmMessage.setHorizontalAlignment(SwingConstants.CENTER);
+        withdrawConfirmMessage.setFont(new Font("Circular Std Bold", Font.PLAIN, 65));
+        withdrawConfirmMessage.setBounds(0, 0, 1382, 864);
+        withdrawConfirmPanel.add(withdrawConfirmMessage);
 
 
         //Withdraw custom amount screen
