@@ -9,7 +9,7 @@ void setup() {
   Serial.begin(9600);        // Initialize serial communications with the PC
   SPI.begin();               // Init SPI bus
   mfrc522.PCD_Init();        // Init MFRC522 card
-  Serial.println(F("Write personal data on a MIFARE PICC "));
+  Serial.println(F("Write IBAN in block 1 on a MIFARE PICC "));
 }
 void loop() {
   // Prepare key - all keys are set to FFFFFFFFFFFFh at chip delivery from the factory.
@@ -22,15 +22,20 @@ void loop() {
     return;
   }
   Serial.setTimeout(20000L);
-  String IBAN = "GL03MNBK12345678";
-  
-  byte block = 4;
+  String IBAN = "GL03MNBK00000000";
+
+  byte block = 1;
   byte buffr[] = {IBAN[0], IBAN[1], IBAN[2], IBAN[3],
                   IBAN[4], IBAN[5], IBAN[6], IBAN[7],
                   IBAN[8], IBAN[9], IBAN[10], IBAN[11],
                   IBAN[12], IBAN[13], IBAN[14], IBAN[15],
                  };
-  
+  //  byte buffr[] = {0x0, 0x0, 0x0, 0x0,
+  //                  0x0, 0x0, 0x0, 0x0,
+  //                  0x0, 0x0, 0x0, 0x0,
+  //                  0x0, 0x0, 0x0, 0x0,
+  //                 };
+
   writeBytesToBlock(block, buffr);
   Serial.println(" ");
   mfrc522.PICC_HaltA();
