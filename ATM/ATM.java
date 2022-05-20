@@ -8,9 +8,8 @@ class ATM extends Thread {
     private Keypad keypad;
     private ATMGUI agui;
 
-    private String inputKeypad;
-    String inputUID;
-    String UIDfull;
+    String inputIBAN;
+    String IBANfull;
 
     private String pincode;
     private int attempts;
@@ -37,9 +36,9 @@ class ATM extends Thread {
 
     public void run() {
         scanCard();
-//        menu("E3F6AB18");
-//        withdrawConfirm("E3F6AB18", 70);
-//        receipt("E3F6AB18", 20);
+//        menu("GL03MNBK12345678");
+//        withdrawConfirm("GL03MNBK12345678", 70);
+//        receipt("GL03MNBK12345678", 20);
     }
 
     private void scanCard() {
@@ -50,16 +49,16 @@ class ATM extends Thread {
             Thread.yield();
 
             if (sCon.getInput() != null) {
-                inputUID = sCon.getInput();
-                if (inputUID.charAt(0) == 'U') {
-                    while (inputUID.length() <= 8) {
+                inputIBAN = sCon.getInput();
+                if (inputIBAN.charAt(0) == 'I') {
+                    while (inputIBAN.length() <= 16) {
                         sCon.clearInput();
                         while (sCon.getInput() == null) {
                             Thread.yield();
                         }
-                        inputUID = inputUID + sCon.getInput();
+                        inputIBAN = inputIBAN + sCon.getInput();
                     }
-                    UIDfull = inputUID.substring(1, 9);
+                    IBANfull = inputIBAN.substring(1, 17);
                     break;
                 }
                 sCon.clearInput();
@@ -67,13 +66,13 @@ class ATM extends Thread {
         }
 
         // Check if card isn't blocked
-        if (checkCardBlockStatus(UIDfull)) {
+        if (checkCardBlockStatus(IBANfull)) {
             blockedCard();
         }
-        enterPincode(getPincodeDatabase(UIDfull), UIDfull);
+        enterPincode(getPincodeDatabase(IBANfull), IBANfull);
     }
 
-    private void enterPincode(String correctPin, String UID) {
+    private void enterPincode(String correctPin, String IBAN) {
         agui.enterPin.setText("Enter your pincode");
         agui.pincodePanel.add(agui.logoIcon);
         agui.pinMessage.setText("");
@@ -108,7 +107,7 @@ class ATM extends Thread {
                     }
 
                     if (pincode.equals(correctPin)) {
-                        menu(UID);
+                        menu(IBAN);
                     } else if (attempts != 2) {
                         agui.enterPin.setText("Wrong pincode. Try again");
                         attempts++;
@@ -116,7 +115,7 @@ class ATM extends Thread {
                     } else {
                         agui.enterPin.setText("Too many failed attempts");
                         agui.pinMessage.setText("Your card is blocked");
-                        blockCard(UID);
+                        blockCard(IBAN);
                         try {
                             Thread.sleep(5000);
                         } catch (InterruptedException e) {
@@ -131,7 +130,7 @@ class ATM extends Thread {
         }
     }
 
-    private void menu(String UID) {
+    private void menu(String IBAN) {
         agui.displayPanel("menuPanel");
         agui.menuPanel.add(agui.logoIcon);
 
@@ -142,22 +141,24 @@ class ATM extends Thread {
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                    //If A is pressed
+                    //If A is pressed withdraw 70
                     case "A":
-                        if (checkIfDebt(UID)) {
-                            debtError(UID);
-                            menu(UID);
+                        if (checkIfDebt(IBAN)) {
+                            debtError(IBAN);
+                            menu(IBAN);
                         } else {
-                            withdrawConfirm(UID, 70);
+                            withdrawConfirm(IBAN, 70);
                         }
                         break;
+                    //If B is pressed check balance
                     case "B":
-                        balance(UID);
+                        balance(IBAN);
                         break;
+                    //If C is pressed go to withdraw menu
                     case "C":
-                        withdrawMenu(UID);
+                        withdrawMenu(IBAN);
                         break;
-                    //If * is pressed
+                    //If * is pressed abort
                     case "*":
                         thanks();
                         break;
@@ -166,27 +167,27 @@ class ATM extends Thread {
         }
     }
 
-    private void balance(String UID) {
-        agui.yourBalance.setText("Your balance is: €" + checkBalance(UID));
+    private void balance(String IBAN) {
+        agui.yourBalance.setText("Your balance is: €" + checkBalance(IBAN));
         agui.displayPanel("balancePanel");
         agui.balancePanel.add(agui.logoIcon);
         while (true) {
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                    //If * is pressed don't print out a receipt and dispense the money
+                    //If * is pressed go back to menu
                     case "*":
-                        menu(UID);
+                        menu(IBAN);
                         break;
                 }
             }
         }
     }
 
-    private void withdrawMenu(String UID) {
-        if (checkIfDebt(UID)) {
-            debtError(UID);
-            menu(UID);
+    private void withdrawMenu(String IBAN) {
+        if (checkIfDebt(IBAN)) {
+            debtError(IBAN);
+            menu(IBAN);
         }
         agui.displayPanel("withdrawMenuPanel");
         agui.withdrawMenuPanel.add(agui.logoIcon);
@@ -199,23 +200,23 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If A is pressed withdraw €20
                     case "A":
-                        withdrawConfirm(UID, 20);
+                        withdrawConfirm(IBAN, 20);
                         break;
                     //If B is pressed withdraw €50
                     case "B":
-                        withdrawConfirm(UID, 50);
+                        withdrawConfirm(IBAN, 50);
                         break;
                     //If C is pressed withdraw €100
                     case "C":
-                        withdrawConfirm(UID, 100);
+                        withdrawConfirm(IBAN, 100);
                         break;
-                    //If D is pressed go to custom withdraw method
+                    //If D is pressed go to withdraw custom amount screen
                     case "D":
-                        withdrawCustomAmount(UID);
+                        withdrawCustomAmount(IBAN);
                         break;
                     //If * is pressed go back to menu
                     case "*":
-                        menu(UID);
+                        menu(IBAN);
                         break;
 
                 }
@@ -223,7 +224,7 @@ class ATM extends Thread {
         }
     }
 
-    private void withdrawConfirm(String UID, int amount) {
+    private void withdrawConfirm(String IBAN, int amount) {
         agui.displayPanel("withdrawConfirmPanel");
         agui.withdrawConfirmPanel.add(agui.logoIcon);
         agui.withdrawConfirmMessage.setText("Are you sure you want to withdraw €" + amount + "?");
@@ -235,18 +236,18 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If D is pressed withdraw the amount
                     case "D":
-                        withdraw(UID, amount);
+                        withdraw(IBAN, amount);
                         break;
-                    //If * is pressed don't withdraw the amount
+                    //If * is pressed don't withdraw the amount and go back to menu
                     case "*":
-                        menu(UID);
+                        menu(IBAN);
                         break;
                 }
             }
         }
     }
 
-    private void withdrawCustomAmount(String UID) {
+    private void withdrawCustomAmount(String IBAN) {
         agui.displayPanel("withdrawPanel");
         agui.withdrawPanel.add(agui.logoIcon);
         agui.withdrawAmountCustom.setText("");
@@ -266,20 +267,20 @@ class ATM extends Thread {
                 } else if (keypadInput.equals("D")) {
                     break;
                 } else if (keypadInput.equals("*")) {
-                    withdrawMenu(UID);
+                    withdrawMenu(IBAN);
                 } else if (keypadInput.equals("#") && pinAmount.length() != 0) {
                     pinAmount = pinAmount.substring(0, pinAmount.length() - 1);
                     agui.withdrawAmountCustom.setText(agui.withdrawAmountCustom.getText().substring(0, agui.withdrawAmountCustom.getText().length() - 1));
                 }
             }
         }
-        withdraw(UID, Integer.parseInt(pinAmount));
+        withdraw(IBAN, Integer.parseInt(pinAmount));
     }
 
-    private void withdraw(String UID, int amount) {
+    private void withdraw(String IBAN, int amount) {
         // Check of er genoeg saldo is
         //TODO biljetkeuze-scherm toevoegen
-        if (!checkSufficientBalance(UID, amount)) {
+        if (!checkSufficientBalance(IBAN, amount)) {
             agui.displayPanel("withdrawInsufOptionsPanel");
             agui.withdrawInsufOptionsPanel.add(agui.logoIcon);
             while (true) {
@@ -290,11 +291,11 @@ class ATM extends Thread {
                     switch (keypadInput) {
                         //If B is pressed check balance
                         case "B":
-                            balance(UID);
+                            balance(IBAN);
                             break;
                         //If C is pressed enter custom amount
                         case "C":
-                            withdrawCustomAmount(UID);
+                            withdrawCustomAmount(IBAN);
                             break;
                         //If * is abort transaction
                         case "*":
@@ -315,11 +316,11 @@ class ATM extends Thread {
         billAmountTen = (amount - bilAmountFifty * 50) / 10;
 
         if (amount > 300) {
-            exceedsLimit(UID, amount);
+            exceedsLimit(IBAN, amount);
         }
         if (amount - (bilAmountFifty * 50) - (billAmountTen * 10) != 0 || amount == 0) {
             //ongeldig bedrag ingevoerd (geen tiental of 0)
-            invalidAmount(UID, amount);
+            invalidAmount(IBAN, amount);
         }
         sCon.giveOutput("000000000000000000001" + billAmountTen + bilAmountFifty);
         readBillsAvailable();
@@ -334,7 +335,7 @@ class ATM extends Thread {
             if (amount <= 90 && bilAmountFifty > availableFifties && availableTens > 0) {
                 if ((amount - availableFifties * 50) / 10 <= availableTens) {
                     sCon.giveOutput("000000000000000000001" + (amount - availableFifties * 50) / 10 + availableFifties);
-                    printing(UID, amount);
+                    printing(IBAN, amount);
                 }
             }
             agui.displayPanel("insufBillsPanel");
@@ -356,7 +357,7 @@ class ATM extends Thread {
                     switch (keypadInput) {
                         //If C is pressed enter custom amount
                         case "C":
-                            withdrawCustomAmount(UID);
+                            withdrawCustomAmount(IBAN);
                             break;
                         //If * is abort transaction
                         case "*":
@@ -367,11 +368,11 @@ class ATM extends Thread {
                 }
             }
         } else {
-            printing(UID, amount);
+            printing(IBAN, amount);
         }
     }
 
-    private void invalidAmount(String UID, int amount) {
+    private void invalidAmount(String IBAN, int amount) {
         agui.displayPanel("withdrawProcessScreen");
         agui.withdrawProcessScreen.add(agui.logoIcon);
 
@@ -387,7 +388,7 @@ class ATM extends Thread {
                 if (keypadInput != null) {
                     //If * is pressed go back to withdraw menu
                     if ("*".equals(keypadInput)) {
-                        withdrawCustomAmount(UID);
+                        withdrawCustomAmount(IBAN);
                     }
                 }
             }
@@ -408,18 +409,18 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If * is pressed go back to withdraw men
                     case "*":
-                        withdrawMenu(UID);
+                        withdrawMenu(IBAN);
                         break;
                     //If D is pressed withdraw the suggested amount
                     case "D":
-                        withdraw(UID, amountRounded);
+                        withdraw(IBAN, amountRounded);
                         break;
                 }
             }
         }
     }
 
-    private void exceedsLimit(String UID, int amount) {
+    private void exceedsLimit(String IBAN, int amount) {
         agui.displayPanel("withdrawLimitPanel");
         agui.withdrawLimitPanel.add(agui.logoIcon);
         agui.withdrawLimitText.setText("€" + amount + " exceeds limit.");
@@ -431,32 +432,32 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If * is pressed go back to withdraw men
                     case "*":
-                        withdrawMenu(UID);
+                        withdrawMenu(IBAN);
                         break;
                     //If D is pressed withdraw the suggested amount
                     case "D":
-                        withdraw(UID, 300);
+                        withdraw(IBAN, 300);
                         break;
                 }
             }
         }
     }
 
-    private void printing(String UID, int amount) {
+    private void printing(String IBAN, int amount) {
         agui.displayPanel("printingPanel");
         agui.printingPanel.add(agui.logoIcon);
         agui.printingMoney.setText("Printing " + "€" + amount);
-        editBalance(UID, amount);
+        editBalance(IBAN, amount);
         printingSleep = (billAmountTen + bilAmountFifty) * 1200;
         try {
             Thread.sleep(printingSleep);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        receipt(UID, amount);
+        receipt(IBAN, amount);
     }
 
-    private void receipt(String UID, int amount) {
+    private void receipt(String IBAN, int amount) {
         agui.displayPanel("receiptPanel");
         agui.receiptPanel.add(agui.logoIcon);
         while (true) {
@@ -469,7 +470,7 @@ class ATM extends Thread {
                     //If D is pressed print out a receipt and dispense the money
                     case "D":
                         sCon.giveOutput(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mmdd/MM/yyyy")) +
-                                getIBAN(UID).substring(14, 18) + "1" + "000" + amount);
+                                IBAN.substring(12, 16) + "1" + "000" + amount);
                         thanks();
                         break;
                     //If * is pressed don't print out a receipt and dispense the money
@@ -504,7 +505,7 @@ class ATM extends Thread {
         scanCard();
     }
 
-    private void debtError(String UID) {
+    private void debtError(String IBAN) {
         agui.displayPanel("debtErrorPanel");
         agui.debtErrorPanel.add(agui.logoIcon);
         while (true) {
@@ -515,9 +516,9 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If B is pressed check balance
                     case "B":
-                        balance(UID);
+                        balance(IBAN);
                         break;
-                    //If * is abort transaction
+                    //If * is pressed abort transaction
                     case "*":
                         thanks();
                         break;
@@ -551,14 +552,14 @@ class ATM extends Thread {
     // DATABASE SQL METHODS
 
 
-    private void blockCard(String UID) {
+    private void blockCard(String IBAN) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/moneybank", "root", "MNBK22");
             Statement stmt = con.createStatement();
 
-            stmt.executeUpdate("UPDATE cards SET BlockStatus = 1 WHERE uid = '" + UID + "'");
+            stmt.executeUpdate("UPDATE accounts SET BlockStatus = 1 WHERE IBAN = '" + IBAN + "'");
             con.close();
 
         } catch (Exception e) {
@@ -566,8 +567,8 @@ class ATM extends Thread {
         }
     }
 
-    private void editBalance(String UID, int amount) {
-        int newBalance = Integer.parseInt(checkBalance(UID)) - amount;
+    private void editBalance(String IBAN, int amount) {
+        int newBalance = Integer.parseInt(checkBalance(IBAN)) - amount;
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -575,9 +576,7 @@ class ATM extends Thread {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/moneybank", "root", "MNBK22");
             Statement stmt = con.createStatement();
 
-            stmt.executeUpdate("UPDATE accounts  \n" +
-                    "JOIN cards ON cards.CardID = accounts.CardID\n" +
-                    "SET Balance = " + newBalance + " WHERE cards.uid = " + "'" + UID + "'");
+            stmt.executeUpdate("UPDATE accounts SET Balance = " + newBalance + " WHERE IBAN = '" + IBAN + "'");
 
             con.close();
 
@@ -586,14 +585,14 @@ class ATM extends Thread {
         }
     }
 
-    private String getPincodeDatabase(String UID) {
+    private String getPincodeDatabase(String IBAN) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/moneybank", "root", "MNBK22");
             Statement stmt = con.createStatement();
 
-            ResultSet rs = stmt.executeQuery("SELECT PinCode FROM cards WHERE uid = '" + UID + "'");
+            ResultSet rs = stmt.executeQuery("SELECT pinCode FROM accounts WHERE IBAN = '" + IBAN + "'");
             String pincode = null;
             while (rs.next()) {
                 pincode = rs.getString(1);
@@ -607,7 +606,7 @@ class ATM extends Thread {
         return null;
     }
 
-    private String checkBalance(String UID) {
+    private String checkBalance(String IBAN) {
         balance = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -615,9 +614,7 @@ class ATM extends Thread {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/moneybank", "root", "MNBK22");
             Statement stmt = con.createStatement();
 
-            ResultSet rs = stmt.executeQuery("SELECT Balance FROM accounts\n" +
-                    "JOIN cards ON cards.CardID = accounts.CardID\n" +
-                    "WHERE cards.uid = " + "'" + UID + "'");
+            ResultSet rs = stmt.executeQuery("SELECT Balance FROM accounts WHERE IBAN = '" + IBAN + "'");
             while (rs.next()) {
                 balance = rs.getString(1);
             }
@@ -629,29 +626,7 @@ class ATM extends Thread {
         return balance;
     }
 
-    private String getIBAN(String UID) {
-        String IBAN = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/moneybank", "root", "MNBK22");
-            Statement stmt = con.createStatement();
-
-            ResultSet rs = stmt.executeQuery("SELECT IBAN FROM accounts\n" +
-                    "JOIN cards ON cards.CardID = accounts.CardID\n" +
-                    "WHERE cards.uid = " + "'" + UID + "'");
-            while (rs.next()) {
-                IBAN = rs.getString(1);
-            }
-            con.close();
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return IBAN;
-    }
-
-    private Boolean checkCardBlockStatus(String UID) {
+    private Boolean checkCardBlockStatus(String IBAN) {
         String blockStatus = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -659,7 +634,7 @@ class ATM extends Thread {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/moneybank", "root", "MNBK22");
             Statement stmt = con.createStatement();
 
-            ResultSet rs = stmt.executeQuery("SELECT BlockStatus FROM cards WHERE uid = '" + UID + "'");
+            ResultSet rs = stmt.executeQuery("SELECT BlockStatus FROM accounts WHERE IBAN = '" + IBAN + "'");
             while (rs.next()) {
                 blockStatus = rs.getString(1);
             }
@@ -672,16 +647,16 @@ class ATM extends Thread {
         return blockStatus.equals("1");
     }
 
-    private boolean checkIfDebt(String UID) {
-        if (Integer.parseInt(checkBalance(UID)) < 0) {
+    private boolean checkIfDebt(String IBAN) {
+        if (Integer.parseInt(checkBalance(IBAN)) < 0) {
             return true;
         } else {
             return false;
         }
     }
 
-    private boolean checkSufficientBalance(String UID, int withdrawAmount) {
-        if (Integer.parseInt(checkBalance(UID)) >= withdrawAmount) {
+    private boolean checkSufficientBalance(String IBAN, int withdrawAmount) {
+        if (Integer.parseInt(checkBalance(IBAN)) >= withdrawAmount) {
             return true;
         } else {
             return false;
