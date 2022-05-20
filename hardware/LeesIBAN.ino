@@ -10,7 +10,7 @@ void setup() {
   Serial.begin(9600);                                           // Initialize serial communications with the PC
   SPI.begin();                                                  // Init SPI bus
   mfrc522.PCD_Init();                                              // Init MFRC522 card
-  Serial.println(F("Read personal data on a MIFARE PICC:"));    //shows in serial that it is ready to read
+  Serial.println(F("Read IBAN on a MIFARE PICC:"));    //shows in serial that it is ready to read
 }
 //*****************************************************************************************//
 void loop() {
@@ -28,11 +28,11 @@ void loop() {
     return;
   }
   Serial.println(F("**Card Detected:**"));
-  delay(50);
+//  delay(100);
   byte buffer1[18];
-  block = 4;
+  block = 1;
   len = 18;
-  status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, 4, &key, &(mfrc522.uid));
+  status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, 1, &key, &(mfrc522.uid));
   if (status != MFRC522::STATUS_OK) {
     Serial.print(F("Authentication failed: "));
     Serial.println(mfrc522.GetStatusCodeName(status));
