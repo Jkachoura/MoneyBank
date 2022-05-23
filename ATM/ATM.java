@@ -64,6 +64,10 @@ class ATM extends Thread {
                 sCon.clearInput();
             }
         }
+        if (IBANfull.charAt(0) == 0x00) {
+            //No IBAN found on card (block 1)
+            scanCard();
+        }
 
         // Check if card isn't blocked
         if (checkCardBlockStatus(IBANfull)) {
@@ -135,7 +139,6 @@ class ATM extends Thread {
         agui.menuPanel.add(agui.logoIcon);
 
         while (true) {
-            //Set up the variables and get the transactionID from the database
             Thread.yield();
             //Get keypad input
             keypadInput = keypad.getInput();
@@ -192,7 +195,6 @@ class ATM extends Thread {
         agui.displayPanel("withdrawMenuPanel");
         agui.withdrawMenuPanel.add(agui.logoIcon);
         while (true) {
-            //Set up the variables and get the transactionID from the database
             Thread.yield();
             //Get keypad input
             keypadInput = keypad.getInput();
@@ -461,7 +463,6 @@ class ATM extends Thread {
         agui.displayPanel("receiptPanel");
         agui.receiptPanel.add(agui.logoIcon);
         while (true) {
-            //Set up the variables and get the transactionID from the database
             Thread.yield();
             //Get keypad input
             keypadInput = keypad.getInput();
