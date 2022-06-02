@@ -11,27 +11,27 @@ moneybank = mysql.connector.connect(
     )
 mycursor = moneybank.cursor()
 
-mycursor.execute("SELECT * FROM customers WHERE FirstName= 'Sam'")
 
-myresult = mycursor.fetchall()
 
-for x in myresult:
-  print(x)
 
-@app.route('/balance', methods = ['GET'])
+@app.route('/balance', methods = ['GET', 'POST'])
 def check_balance():
     data= request.json
+    if not "IBAN" in data or not "Pincode" in data:
+        return(make_response(jsonify("Foute body!"), 400))
     iban = data["IBAN"]
     pincode = data["Pincode"]
     #balance = data["Balance"]
-    print(iban)
-    print(pincode)
-   # print(balance)
-    if (iban == "IBAN123"):
+
+    mycursor.execute(f"SELECT pinCode FROM accounts WHERE IBAN = '{iban}'")
+    results = mycursor.fetchall()
+    print(results[0])
+    if (iban == f"{iban}"):
         return(make_response(jsonify("OK!"), 200))
     return(make_response(jsonify("Account does not exist")),404)
+    
 
-@app.route('/withdraw', methods = ['GET'])
+@app.route('/withdraw', methods = ['GET', 'POST'])
 def withdraw():
     data = request.json
     iban = data["IBAN"]
