@@ -36,9 +36,12 @@ class ATM extends Thread {
 
     public void run() {
         scanCard();
-//        menu("GL03MNBK12345678");
+//        enterPincode("GL03MNBK12345670");
 //        withdrawConfirm("GL03MNBK12345678", 70);
 //        receipt("GL03MNBK12345678", 20);
+//        balance("GL03MNBK12345678", 5678);
+//        getPincodeDatabase("GL03MNBK12345678");
+//        printing("GL03MNBK12345678", 100, 5678);
     }
 
     private void scanCard() {
@@ -68,15 +71,10 @@ class ATM extends Thread {
             //No IBAN found on card (block 1)
             scanCard();
         }
-
-        // Check if card isn't blocked
-        if (checkCardBlockStatus(IBANfull)) {
-            blockedCard();
-        }
-        enterPincode(getPincodeDatabase(IBANfull), IBANfull);
+        enterPincode(IBANfull);
     }
 
-    private void enterPincode(String correctPin, String IBAN) {
+    private void enterPincode(String IBAN) {
         agui.enterPin.setText("Enter your pincode");
         agui.pincodePanel.add(agui.logoIcon);
         agui.pinMessage.setText("");
@@ -109,23 +107,50 @@ class ATM extends Thread {
                             }
                         }
                     }
+                    String checkPincode = Post_JSON.getBalance(IBAN, Integer.parseInt(pincode));
+                    if (checkPincode == null) {
+                        agui.enterPin.setText("Something went wrong.");
+                        agui.pinMessage.setText("Try again later.");
+                        try {
+                            Thread.sleep(4000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
 
-                    if (pincode.equals(correctPin)) {
-                        menu(IBAN);
-                    } else if (attempts != 2) {
-                        agui.enterPin.setText("Wrong pincode. Try again");
-                        attempts++;
-                        agui.pinMessage.setText(3 - attempts + " attempts left");
-                    } else {
+                    if (checkPincode.equals("Account does not exist")) {
+                        agui.enterPin.setText("Account does not exist");
+                        agui.pinMessage.setText("Aborting transaction...");
+                        try {
+                            Thread.sleep(4000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                        scanCard();
+                    } else if (checkPincode.equals("Blocked")) {
                         agui.enterPin.setText("Too many failed attempts");
                         agui.pinMessage.setText("Your card is blocked");
-                        blockCard(IBAN);
+                        blockedCard();
+                        try {
+                            Thread.sleep(4000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (checkPincode.equals("Wrong body")) {
+                        agui.enterPin.setText("Something went wrong.");
+                        agui.pinMessage.setText("Try again later");
                         try {
                             Thread.sleep(5000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         scanCard();
+                    } else if (checkPincode.substring(0, 6).equals("Succes")) {
+                        menu(IBAN, Integer.parseInt(pincode));
+                    } else if (checkPincode.substring(0, 9).equals("Incorrect")) {
+                        agui.enterPin.setText("Wrong pincode. Try again");
+                        attempts = Integer.parseInt(checkPincode.substring(9, 10));
+                        agui.pinMessage.setText(attempts + " attempts left");
                     }
                 } else if (keypadInput.equals("*")) {
                     thanks();
@@ -134,7 +159,7 @@ class ATM extends Thread {
         }
     }
 
-    private void menu(String IBAN) {
+    private void menu(String IBAN, int pinCode) {
         agui.displayPanel("menuPanel");
         agui.menuPanel.add(agui.logoIcon);
 
@@ -146,20 +171,20 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If A is pressed withdraw 70
                     case "A":
-                        if (checkIfDebt(IBAN)) {
-                            debtError(IBAN);
-                            menu(IBAN);
+                        if (checkIfDebt(IBAN, pinCode)) {
+                            debtError(IBAN, pinCode);
+                            menu(IBAN, pinCode);
                         } else {
-                            withdrawConfirm(IBAN, 70);
+                            withdrawConfirm(IBAN, 70, pinCode);
                         }
                         break;
                     //If B is pressed check balance
                     case "B":
-                        balance(IBAN);
+                        balance(IBAN, pinCode);
                         break;
                     //If C is pressed go to withdraw menu
                     case "C":
-                        withdrawMenu(IBAN);
+                        withdrawMenu(IBAN, pinCode);
                         break;
                     //If * is pressed abort
                     case "*":
@@ -170,8 +195,8 @@ class ATM extends Thread {
         }
     }
 
-    private void balance(String IBAN) {
-        agui.yourBalance.setText("Your balance is: €" + checkBalance(IBAN));
+    private void balance(String IBAN, int pinCode) {
+        agui.yourBalance.setText("Your balance is: €" + checkBalance(IBAN, pinCode));
         agui.displayPanel("balancePanel");
         agui.balancePanel.add(agui.logoIcon);
         while (true) {
@@ -180,17 +205,17 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If * is pressed go back to menu
                     case "*":
-                        menu(IBAN);
+                        menu(IBAN, pinCode);
                         break;
                 }
             }
         }
     }
 
-    private void withdrawMenu(String IBAN) {
-        if (checkIfDebt(IBAN)) {
-            debtError(IBAN);
-            menu(IBAN);
+    private void withdrawMenu(String IBAN, int pinCode) {
+        if (checkIfDebt(IBAN, pinCode)) {
+            debtError(IBAN, pinCode);
+            menu(IBAN, pinCode);
         }
         agui.displayPanel("withdrawMenuPanel");
         agui.withdrawMenuPanel.add(agui.logoIcon);
@@ -202,23 +227,23 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If A is pressed withdraw €20
                     case "A":
-                        withdrawConfirm(IBAN, 20);
+                        withdrawConfirm(IBAN, 20, pinCode);
                         break;
                     //If B is pressed withdraw €50
                     case "B":
-                        withdrawConfirm(IBAN, 50);
+                        withdrawConfirm(IBAN, 50, pinCode);
                         break;
                     //If C is pressed withdraw €100
                     case "C":
-                        withdrawConfirm(IBAN, 100);
+                        withdrawConfirm(IBAN, 100, pinCode);
                         break;
                     //If D is pressed go to withdraw custom amount screen
                     case "D":
-                        withdrawCustomAmount(IBAN);
+                        withdrawCustomAmount(IBAN, pinCode);
                         break;
                     //If * is pressed go back to menu
                     case "*":
-                        menu(IBAN);
+                        menu(IBAN, pinCode);
                         break;
 
                 }
@@ -226,7 +251,7 @@ class ATM extends Thread {
         }
     }
 
-    private void withdrawConfirm(String IBAN, int amount) {
+    private void withdrawConfirm(String IBAN, int amount, int pinCode) {
         agui.displayPanel("withdrawConfirmPanel");
         agui.withdrawConfirmPanel.add(agui.logoIcon);
         agui.withdrawConfirmMessage.setText("Are you sure you want to withdraw €" + amount + "?");
@@ -238,18 +263,18 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If D is pressed withdraw the amount
                     case "D":
-                        withdraw(IBAN, amount);
+                        withdraw(IBAN, amount, pinCode);
                         break;
                     //If * is pressed don't withdraw the amount and go back to menu
                     case "*":
-                        menu(IBAN);
+                        menu(IBAN, pinCode);
                         break;
                 }
             }
         }
     }
 
-    private void withdrawCustomAmount(String IBAN) {
+    private void withdrawCustomAmount(String IBAN, int pinCode) {
         agui.displayPanel("withdrawPanel");
         agui.withdrawPanel.add(agui.logoIcon);
         agui.withdrawAmountCustom.setText("");
@@ -269,20 +294,19 @@ class ATM extends Thread {
                 } else if (keypadInput.equals("D")) {
                     break;
                 } else if (keypadInput.equals("*")) {
-                    withdrawMenu(IBAN);
+                    withdrawMenu(IBAN, pinCode);
                 } else if (keypadInput.equals("#") && pinAmount.length() != 0) {
                     pinAmount = pinAmount.substring(0, pinAmount.length() - 1);
                     agui.withdrawAmountCustom.setText(agui.withdrawAmountCustom.getText().substring(0, agui.withdrawAmountCustom.getText().length() - 1));
                 }
             }
         }
-        withdraw(IBAN, Integer.parseInt(pinAmount));
+        withdraw(IBAN, Integer.parseInt(pinAmount), pinCode);
     }
 
-    private void withdraw(String IBAN, int amount) {
+    private void withdraw(String IBAN, int amount, int pinCode) {
         // Check of er genoeg saldo is
-        //TODO biljetkeuze-scherm toevoegen
-        if (!checkSufficientBalance(IBAN, amount)) {
+        if (!checkSufficientBalance(IBAN, amount, pinCode)) {
             agui.displayPanel("withdrawInsufOptionsPanel");
             agui.withdrawInsufOptionsPanel.add(agui.logoIcon);
             while (true) {
@@ -293,11 +317,11 @@ class ATM extends Thread {
                     switch (keypadInput) {
                         //If B is pressed check balance
                         case "B":
-                            balance(IBAN);
+                            balance(IBAN, pinCode);
                             break;
                         //If C is pressed enter custom amount
                         case "C":
-                            withdrawCustomAmount(IBAN);
+                            withdrawCustomAmount(IBAN, pinCode);
                             break;
                         //If * is abort transaction
                         case "*":
@@ -318,11 +342,11 @@ class ATM extends Thread {
         billAmountTen = (amount - bilAmountFifty * 50) / 10;
 
         if (amount > 300) {
-            exceedsLimit(IBAN, amount);
+            exceedsLimit(IBAN, amount, pinCode);
         }
         if (amount - (bilAmountFifty * 50) - (billAmountTen * 10) != 0 || amount == 0) {
             //ongeldig bedrag ingevoerd (geen tiental of 0)
-            invalidAmount(IBAN, amount);
+            invalidAmount(IBAN, amount, pinCode);
         }
         sCon.giveOutput("000000000000000000001" + billAmountTen + bilAmountFifty);
         readBillsAvailable();
@@ -337,7 +361,7 @@ class ATM extends Thread {
             if (amount <= 90 && bilAmountFifty > availableFifties && availableTens > 0) {
                 if ((amount - availableFifties * 50) / 10 <= availableTens) {
                     sCon.giveOutput("000000000000000000001" + (amount - availableFifties * 50) / 10 + availableFifties);
-                    printing(IBAN, amount);
+                    printing(IBAN, amount, pinCode);
                 }
             }
             agui.displayPanel("insufBillsPanel");
@@ -349,7 +373,6 @@ class ATM extends Thread {
             } else if (bilAmountFifty > availableFifties) {
                 agui.insufBills2.setText("Not enough €50 bills");
             }
-            //TODO print integers als 2 cijfers sturen zodat er meer dan 10 biljetten geprint kunnen worden
 
             while (true) {
                 //niet genoeg saldo opties
@@ -359,7 +382,7 @@ class ATM extends Thread {
                     switch (keypadInput) {
                         //If C is pressed enter custom amount
                         case "C":
-                            withdrawCustomAmount(IBAN);
+                            withdrawCustomAmount(IBAN, pinCode);
                             break;
                         //If * is abort transaction
                         case "*":
@@ -370,11 +393,11 @@ class ATM extends Thread {
                 }
             }
         } else {
-            printing(IBAN, amount);
+            printing(IBAN, amount, pinCode);
         }
     }
 
-    private void invalidAmount(String IBAN, int amount) {
+    private void invalidAmount(String IBAN, int amount, int pinCode) {
         agui.displayPanel("withdrawProcessScreen");
         agui.withdrawProcessScreen.add(agui.logoIcon);
 
@@ -390,7 +413,7 @@ class ATM extends Thread {
                 if (keypadInput != null) {
                     //If * is pressed go back to withdraw menu
                     if ("*".equals(keypadInput)) {
-                        withdrawCustomAmount(IBAN);
+                        withdrawCustomAmount(IBAN, pinCode);
                     }
                 }
             }
@@ -411,18 +434,18 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If * is pressed go back to withdraw men
                     case "*":
-                        withdrawMenu(IBAN);
+                        withdrawMenu(IBAN, pinCode);
                         break;
                     //If D is pressed withdraw the suggested amount
                     case "D":
-                        withdraw(IBAN, amountRounded);
+                        withdraw(IBAN, amountRounded, pinCode);
                         break;
                 }
             }
         }
     }
 
-    private void exceedsLimit(String IBAN, int amount) {
+    private void exceedsLimit(String IBAN, int amount, int pinCode) {
         agui.displayPanel("withdrawLimitPanel");
         agui.withdrawLimitPanel.add(agui.logoIcon);
         agui.withdrawLimitText.setText("€" + amount + " exceeds limit.");
@@ -434,22 +457,71 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If * is pressed go back to withdraw men
                     case "*":
-                        withdrawMenu(IBAN);
+                        withdrawMenu(IBAN, pinCode);
                         break;
                     //If D is pressed withdraw the suggested amount
                     case "D":
-                        withdraw(IBAN, 300);
+                        withdraw(IBAN, 300, pinCode);
                         break;
                 }
             }
         }
     }
 
-    private void printing(String IBAN, int amount) {
+    private void printing(String IBAN, int amount, int pinCode) {
         agui.displayPanel("printingPanel");
         agui.printingPanel.add(agui.logoIcon);
-        agui.printingMoney.setText("Printing " + "€" + amount);
-        editBalance(IBAN, amount);
+        agui.printingMoney.setText("");
+        agui.printingMessage.setText("");
+        String withdrawOutput = editBalance(IBAN, amount, pinCode);
+        if (withdrawOutput == null) {
+            agui.printingMoney.setText("Something went wrong.");
+            agui.printingMessage.setText("Try again later.");
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            scanCard();
+        } else if (withdrawOutput.equals("Account does not exist")) {
+            agui.printingMoney.setText("Account does not exist");
+            agui.printingMessage.setText("Aborting transaction...");
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            scanCard();
+        } else if (withdrawOutput.equals("Blocked")) {
+            agui.printingMoney.setText("This card is blocked");
+            agui.printingMessage.setText("Contact the helpdesk.");
+            blockedCard();
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else if (withdrawOutput.equals("Wrong body")) {
+            agui.printingMoney.setText("Something went wrong.");
+            agui.printingMessage.setText("Try again later");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scanCard();
+        } else if (withdrawOutput.substring(0, 6).equals("Succes")) {
+            agui.printingMoney.setText("Printing " + "€" + amount);
+        } else if (withdrawOutput.substring(0, 9).equals("Incorrect")) {
+            agui.printingMoney.setText("Something went wrong.");
+            agui.printingMessage.setText("Try again later");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scanCard();
+        }
         printingSleep = (billAmountTen + bilAmountFifty) * 1200;
         try {
             Thread.sleep(printingSleep);
@@ -506,7 +578,7 @@ class ATM extends Thread {
         scanCard();
     }
 
-    private void debtError(String IBAN) {
+    private void debtError(String IBAN, int pinCode) {
         agui.displayPanel("debtErrorPanel");
         agui.debtErrorPanel.add(agui.logoIcon);
         while (true) {
@@ -517,7 +589,7 @@ class ATM extends Thread {
                 switch (keypadInput) {
                     //If B is pressed check balance
                     case "B":
-                        balance(IBAN);
+                        balance(IBAN, pinCode);
                         break;
                     //If * is pressed abort transaction
                     case "*":
@@ -553,111 +625,71 @@ class ATM extends Thread {
     // DATABASE SQL METHODS
 
 
-    private void blockCard(String IBAN) {
+//    private void blockCard(String IBAN) {
+//        try {
+//            Post_JSON.blockCard(IBAN);
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//    }
+
+    private String editBalance(String IBAN, int amount, int pinCode) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/moneybank", "root", "MNBK22");
-            Statement stmt = con.createStatement();
-
-            stmt.executeUpdate("UPDATE accounts SET BlockStatus = 1 WHERE IBAN = '" + IBAN + "'");
-            con.close();
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    private void editBalance(String IBAN, int amount) {
-        int newBalance = Integer.parseInt(checkBalance(IBAN)) - amount;
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/moneybank", "root", "MNBK22");
-            Statement stmt = con.createStatement();
-
-            stmt.executeUpdate("UPDATE accounts SET Balance = " + newBalance + " WHERE IBAN = '" + IBAN + "'");
-
-            con.close();
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    private String getPincodeDatabase(String IBAN) {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/moneybank", "root", "MNBK22");
-            Statement stmt = con.createStatement();
-
-            ResultSet rs = stmt.executeQuery("SELECT pinCode FROM accounts WHERE IBAN = '" + IBAN + "'");
-            String pincode = null;
-            while (rs.next()) {
-                pincode = rs.getString(1);
-            }
-            con.close();
-            return pincode;
-
+            return Post_JSON.withdraw(IBAN, amount, pinCode);
         } catch (Exception e) {
             System.out.println(e);
         }
         return null;
     }
 
-    private String checkBalance(String IBAN) {
-        balance = null;
+//    private String getPincodeDatabase(String IBAN) {
+//        try {
+//            String pinCode = null;
+//            pincode = Post_JSON.pinCheck(IBAN);
+//            return pincode;
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//        return null;
+//    }
+
+    private String checkBalance(String IBAN, int pinCode) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/moneybank", "root", "MNBK22");
-            Statement stmt = con.createStatement();
-
-            ResultSet rs = stmt.executeQuery("SELECT Balance FROM accounts WHERE IBAN = '" + IBAN + "'");
-            while (rs.next()) {
-                balance = rs.getString(1);
+            balance = null;
+            balance = Post_JSON.getBalance(IBAN, pinCode);
+            if (balance == null) {
+                return null;
+            } else {
+                balance = balance.substring(6, balance.length() - 1);
+                return balance;
             }
-            con.close();
-
         } catch (Exception e) {
             System.out.println(e);
         }
-        return balance;
+        return null;
     }
 
-    private Boolean checkCardBlockStatus(String IBAN) {
-        String blockStatus = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+//    private Boolean checkCardBlockStatus(String IBAN) {
+//        String blockStatus = null;
+//        try {
+//            blockStatus = Post_JSON.checkBlockStatus(IBAN);
+//            return blockStatus.equals("1");
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//        return null;
+//    }
 
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/moneybank", "root", "MNBK22");
-            Statement stmt = con.createStatement();
-
-            ResultSet rs = stmt.executeQuery("SELECT BlockStatus FROM accounts WHERE IBAN = '" + IBAN + "'");
-            while (rs.next()) {
-                blockStatus = rs.getString(1);
-            }
-            con.close();
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        assert blockStatus != null;
-        return blockStatus.equals("1");
-    }
-
-    private boolean checkIfDebt(String IBAN) {
-        if (Integer.parseInt(checkBalance(IBAN)) < 0) {
+    private boolean checkIfDebt(String IBAN, int pinCode) {
+        if (Integer.parseInt(checkBalance(IBAN, pinCode)) < 0) {
             return true;
         } else {
             return false;
         }
     }
 
-    private boolean checkSufficientBalance(String IBAN, int withdrawAmount) {
-        if (Integer.parseInt(checkBalance(IBAN)) >= withdrawAmount) {
+    private boolean checkSufficientBalance(String IBAN, int withdrawAmount, int pinCode) {
+        if (Integer.parseInt(checkBalance(IBAN, pinCode)) >= withdrawAmount) {
             return true;
         } else {
             return false;
