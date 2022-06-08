@@ -31,7 +31,7 @@ public class Post_JSON {
             os.write(json.getBytes("UTF-8"));
             os.close();
 
-            // response reading
+            //response reading
             int code = conn.getResponseCode();
             InputStream in = null;
             if (code == 200) {
@@ -78,7 +78,7 @@ public class Post_JSON {
             os.write(json.getBytes("UTF-8"));
             os.close();
 
-            // response reading
+            //response reading
             int code = conn.getResponseCode();
             InputStream in = null;
             if (code == 200) {
@@ -102,6 +102,8 @@ public class Post_JSON {
                     return "Blocked";
                 case 400:
                     return "Wrong body";
+                case 406:
+                    return "Insufficient";
             }
         } catch (Exception e) {
             System.out.println(e);
