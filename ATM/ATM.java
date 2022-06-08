@@ -38,10 +38,10 @@ class ATM extends Thread {
         scanCard();
     }
 
+    /**
+     * Hierin wordt gewacht tot een kaart wordt gescand. Wanneer een kaart gescand is gaat die door naar enterPincode().
+     */
     private void scanCard() {
-        /*
-        Hierin wordt gewacht tot een kaart wordt gescand. Wanneer een kaart gescand is gaat die door naar enterPincode().
-        */
         agui.displayPanel("scanCardPanel");
         agui.scanCardPanel.add(agui.logoIcon);
 
@@ -71,10 +71,10 @@ class ATM extends Thread {
         enterPincode(IBANfull);
     }
 
+    /**
+     * Hierin wordt gekeken wat er voor pincode wordt ingevoerd. En dit wordt gecommuniceerd met de API.
+     */
     private void enterPincode(String IBAN) {
-        /*
-        Hierin wordt gekeken wat er voor pincode wordt ingevoerd. En dit wordt gecommuniceerd met de API.
-        */
         agui.enterPin.setText("Enter your pincode");
         agui.pincodePanel.add(agui.logoIcon);
         agui.pinMessage.setText("");
@@ -161,10 +161,10 @@ class ATM extends Thread {
         }
     }
 
+    /**
+     * In deze functie wordt het menu weergeven en gekeken naar de input van de gebruiker.
+     */
     private void menu(String IBAN, int pinCode) {
-        /*
-        In deze functie wordt het menu weergeven en gekeken naar de input van de gebruiker.
-        */
         agui.displayPanel("menuPanel");
         agui.menuPanel.add(agui.logoIcon);
 
@@ -200,10 +200,10 @@ class ATM extends Thread {
         }
     }
 
+    /**
+     * Hier wordt het saldo via de API opgevraagd en aan de gebruiker getoond.
+     */
     private void balance(String IBAN, int pinCode) {
-        /*
-        Hier wordt het saldo via de API opgevraagd en aan de gebruiker getoond.
-        */
         agui.yourBalance.setText("Your balance is: €" + checkBalance(IBAN, pinCode));
         agui.displayPanel("balancePanel");
         agui.balancePanel.add(agui.logoIcon);
@@ -220,10 +220,10 @@ class ATM extends Thread {
         }
     }
 
+    /**
+     * Hier wordt verschillende opties voor het opnemen van geld weergegeven.
+     */
     private void withdrawMenu(String IBAN, int pinCode) {
-        /*
-        Hier wordt verschillende opties voor het opnemen van geld weergegeven.
-        */
         if (checkIfDebt(IBAN, pinCode)) {
             debtError(IBAN, pinCode);
             menu(IBAN, pinCode);
@@ -262,10 +262,10 @@ class ATM extends Thread {
         }
     }
 
+    /**
+     * Hierin wordt een extra paneel weergegeven om een bevestiging van het op te nemen bedrag te tonen.
+     */
     private void withdrawConfirm(String IBAN, int amount, int pinCode) {
-        /*
-        Hierin wordt een extra paneel weergegeven om een bevestiging van het op te nemen bedrag te tonen.
-        */
         agui.displayPanel("withdrawConfirmPanel");
         agui.withdrawConfirmPanel.add(agui.logoIcon);
         agui.withdrawConfirmMessage.setText("Are you sure you want to withdraw €" + amount + "?");
@@ -288,10 +288,10 @@ class ATM extends Thread {
         }
     }
 
+    /**
+     * Hierin wordt een scherm weergegeven waarin de gebruiker handmatig een bedrag kan invoeren.
+     */
     private void withdrawCustomAmount(String IBAN, int pinCode) {
-        /*
-        Hierin wordt een scherm weergegeven waarin de gebruiker handmatig een bedrag kan invoeren.
-        */
         agui.displayPanel("withdrawPanel");
         agui.withdrawPanel.add(agui.logoIcon);
         agui.withdrawAmountCustom.setText("");
@@ -322,11 +322,11 @@ class ATM extends Thread {
         withdraw(IBAN, Integer.parseInt(pinAmount), pinCode);
     }
 
+    /**
+     * Hierin worden een aantal checks en berekeningen gemaakt en aan de hand van de uitkomst daarvan
+     * wordt een paneel weergeven.
+     */
     private void withdraw(String IBAN, int amount, int pinCode) {
-        /*
-        Hierin worden een aantal checks en berekeningen gemaatk en aan de hand van de uitkomst daarvan
-        wordt een paneel weergeven.
-        */
         if (!checkSufficientBalance(IBAN, amount, pinCode)) {
             //Er is onvoldoende saldo aanwezig
             agui.displayPanel("withdrawInsufOptionsPanel");
@@ -420,11 +420,11 @@ class ATM extends Thread {
         }
     }
 
+    /**
+     * Deze functie wordt gebruikt wanneer er een ongeldig bedrag ingevoerd was.
+     * Aan de hand van het bedrag worden verschillende opties weergeven.
+     */
     private void invalidAmount(String IBAN, int amount, int pinCode) {
-        /*
-        Deze functie wordt gebruikt wanneer er een ongeldig bedrag ingevoerd was.
-        Aan de hand van het bedrag worden verschillende opties weergeven.
-         */
         agui.displayPanel("withdrawProcessScreen");
         agui.withdrawProcessScreen.add(agui.logoIcon);
 
@@ -472,10 +472,10 @@ class ATM extends Thread {
         }
     }
 
+    /**
+     * Hierin wordt een scherm met opties weergegeven wanneer het ingevoerde bedrag boven het limiet is
+     */
     private void exceedsLimit(String IBAN, int amount, int pinCode) {
-        /*
-        Hierin wordt een scherm met opties weergegeven wanneer het ingevoerde bedrag boven het limiet is
-         */
         agui.displayPanel("withdrawLimitPanel");
         agui.withdrawLimitPanel.add(agui.logoIcon);
         agui.withdrawLimitText.setText("€" + amount + " exceeds limit.");
@@ -498,11 +498,11 @@ class ATM extends Thread {
         }
     }
 
+    /**
+     * Hierin wordt via de API het saldo aangepast aan de hand van het te pinnen bedrag.
+     * Er wordt na een request te sturen naar de API gekeken wat de API terug heeft gestuurd.
+     */
     private void printing(String IBAN, int amount, int pinCode) {
-        /*
-        Hierin wordt via de API het saldo aangepast aan de hand van het te pinnen bedrag.
-        Er wordt na een request te sturen naar de API gekeken wat de API terug heeft gestuurd.
-         */
         agui.displayPanel("printingPanel");
         agui.printingPanel.add(agui.logoIcon);
         agui.printingMoney.setText("");
@@ -535,6 +535,15 @@ class ATM extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        } else if (withdrawOutput.equals("Insufficient")) {
+            agui.printingMoney.setText("Insufficient balance");
+            agui.printingMessage.setText("Try a different amount.");
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            withdrawMenu(IBAN, pinCode);
         } else if (withdrawOutput.equals("Wrong body")) {
             agui.printingMoney.setText("Something went wrong.");
             agui.printingMessage.setText("Try again later");
@@ -565,10 +574,10 @@ class ATM extends Thread {
         receipt(IBAN, amount);
     }
 
+    /**
+     * Er wordt hier een scherm weergeven met de optie voor het printen van een bonnetje.
+     */
     private void receipt(String IBAN, int amount) {
-        /*
-        Er wordt hier een scherm weergeven met de optie voor het printen van een bonnetje.
-         */
         agui.displayPanel("receiptPanel");
         agui.receiptPanel.add(agui.logoIcon);
         while (true) {
@@ -593,11 +602,11 @@ class ATM extends Thread {
         }
     }
 
+    /**
+     * Fucntie voor het weergeven van een scherm met een bedank-bericht.
+     * Na 5 seconden wordt er weer terug gegaan naar het scanCard-scherm.
+     */
     private void thanks() {
-        /*
-        Fucntie voor het weergeven van een scherm met een bedank-bericht.
-        Na 5 seconden wordt er weer terug gegaan naar het scanCard-scherm.
-         */
         agui.displayPanel("thanksPanel");
         agui.thanksPanel.add(agui.logoIcon);
         try {
@@ -608,11 +617,11 @@ class ATM extends Thread {
         scanCard();
     }
 
+    /**
+     * Hierin wordt een scherm weergeven met een bericht dat het pasje is geblokkeerd.
+     * Na 10 seconden wordt er weer terug gegaan naar het scanCard-scherm.
+     */
     private void blockedCard() {
-        /*
-        Hierin wordt een scherm weergeven met een bericht dat het pasje is geblokkeerd.
-        Na 10 seconden wordt er weer terug gegaan naar het scanCard-scherm.
-         */
         agui.displayPanel("blockedCardPanel");
         agui.blockedCardPanel.add(agui.logoIcon);
         try {
@@ -623,10 +632,10 @@ class ATM extends Thread {
         scanCard();
     }
 
+    /**
+     * Er wordt met deze functie een scherm weergeven met opties voor wanneer de gebruiker in het rood staat.
+     */
     private void debtError(String IBAN, int pinCode) {
-        /*
-        Er wordt met deze functie een scherm weergeven met opties voor wanneer de gebruiker in het rood staat.
-         */
         agui.displayPanel("debtErrorPanel");
         agui.debtErrorPanel.add(agui.logoIcon);
         while (true) {
@@ -648,10 +657,10 @@ class ATM extends Thread {
         }
     }
 
+    /**
+     * Hierin wordt met seriële communicatie gecontroleerd hoeveel biljetten er nog aanwezig zijn.
+     */
     private void readBillsAvailable() {
-        /*
-        Hierin wordt met seriële communicatie gecontroleerd hoeveel biljetten er nog aanwezig zijn.
-         */
         while (true) {
             Thread.yield();
             if (sCon.getInput() != null) {
