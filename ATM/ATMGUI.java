@@ -72,6 +72,7 @@ public class ATMGUI extends JFrame {
     //printing money Screen
     public JPanel printingPanel;
     public JLabel printingMoney = new JLabel("");
+    public JLabel printingMessage = new JLabel("");
 
     //Receipt screen
     public JPanel receiptPanel;
@@ -100,7 +101,7 @@ public class ATMGUI extends JFrame {
     public ATMGUI() {
         setContentPane(screenPanel);
         setResizable(false);
-        setAlwaysOnTop(true);
+        setAlwaysOnTop(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1383, 864);
         setUndecorated(true);
@@ -816,6 +817,13 @@ public class ATMGUI extends JFrame {
         printingMoney.setHorizontalAlignment(SwingConstants.CENTER);
         printingMoney.setBounds(0, 0, 1382, 864);
         printingPanel.add(printingMoney);
+
+        printingMessage.setHorizontalAlignment(JLabel.CENTER);
+        printingMessage.setVerticalAlignment(JLabel.CENTER);
+        printingMessage.setFont(new Font("Circular Std Bold", Font.PLAIN, 100));
+        printingMessage.setForeground(Color.decode("#8899A6"));
+        printingMessage.setBounds(0, 200, 1382, 864);
+        printingPanel.add(printingMessage);
 
         //Receipt screen
         receiptPanel = new JPanel();
