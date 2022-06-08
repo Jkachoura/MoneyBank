@@ -39,6 +39,9 @@ class ATM extends Thread {
     }
 
     private void scanCard() {
+        /*
+        Hierin wordt gewacht tot een kaart wordt gescand. Wanneer een kaart gescand is gaat die door naar enterPincode().
+        */
         agui.displayPanel("scanCardPanel");
         agui.scanCardPanel.add(agui.logoIcon);
 
@@ -62,13 +65,16 @@ class ATM extends Thread {
             }
         }
         if (IBANfull.charAt(0) == 0x00) {
-            //No IBAN found on card (block 1)
+            //Geen IBAN gevonden op pas (block 1)
             scanCard();
         }
         enterPincode(IBANfull);
     }
 
     private void enterPincode(String IBAN) {
+        /*
+        Hierin wordt gekeken wat er voor pincode wordt ingevoerd. En dit wordt gecommuniceerd met de API.
+        */
         agui.enterPin.setText("Enter your pincode");
         agui.pincodePanel.add(agui.logoIcon);
         agui.pinMessage.setText("");
@@ -76,6 +82,7 @@ class ATM extends Thread {
 
         attempts = 0;
         while (true) {
+            //Input van keypad wordt gelezen
             Thread.yield();
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
@@ -101,6 +108,7 @@ class ATM extends Thread {
                             }
                         }
                     }
+                    //Pincode wordt gecontroleerd met de API
                     String checkPincode = Post_JSON.getBalance(IBAN, Integer.parseInt(pincode));
                     if (checkPincode == null) {
                         agui.enterPin.setText("Something went wrong.");
@@ -154,16 +162,19 @@ class ATM extends Thread {
     }
 
     private void menu(String IBAN, int pinCode) {
+        /*
+        In deze functie wordt het menu weergeven en gekeken naar de input van de gebruiker.
+        */
         agui.displayPanel("menuPanel");
         agui.menuPanel.add(agui.logoIcon);
 
         while (true) {
             Thread.yield();
-            //Get keypad input
+            //Input van keypad wordt gelezen
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                    //If A is pressed withdraw 70
+                    //Als A is ingedrukt withdraw 70
                     case "A":
                         if (checkIfDebt(IBAN, pinCode)) {
                             debtError(IBAN, pinCode);
@@ -172,15 +183,15 @@ class ATM extends Thread {
                             withdrawConfirm(IBAN, 70, pinCode);
                         }
                         break;
-                    //If B is pressed check balance
+                    //Als B is ingedrukt check saldo
                     case "B":
                         balance(IBAN, pinCode);
                         break;
-                    //If C is pressed go to withdraw menu
+                    //Als C is ingedrukt ga naar withdraw menu
                     case "C":
                         withdrawMenu(IBAN, pinCode);
                         break;
-                    //If * is pressed abort
+                    //Als * is ingedrukt abort
                     case "*":
                         thanks();
                         break;
@@ -190,6 +201,9 @@ class ATM extends Thread {
     }
 
     private void balance(String IBAN, int pinCode) {
+        /*
+        Hier wordt het saldo via de API opgevraagd en aan de gebruiker getoond.
+        */
         agui.yourBalance.setText("Your balance is: €" + checkBalance(IBAN, pinCode));
         agui.displayPanel("balancePanel");
         agui.balancePanel.add(agui.logoIcon);
@@ -197,7 +211,7 @@ class ATM extends Thread {
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                    //If * is pressed go back to menu
+                    //Als * is ingedrukt ga terug naar menu
                     case "*":
                         menu(IBAN, pinCode);
                         break;
@@ -207,6 +221,9 @@ class ATM extends Thread {
     }
 
     private void withdrawMenu(String IBAN, int pinCode) {
+        /*
+        Hier wordt verschillende opties voor het opnemen van geld weergegeven.
+        */
         if (checkIfDebt(IBAN, pinCode)) {
             debtError(IBAN, pinCode);
             menu(IBAN, pinCode);
@@ -215,27 +232,27 @@ class ATM extends Thread {
         agui.withdrawMenuPanel.add(agui.logoIcon);
         while (true) {
             Thread.yield();
-            //Get keypad input
+            //Keypad input wordt gelezen
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                    //If A is pressed withdraw €20
+                    //Als A is ingedrukt withdraw €20
                     case "A":
                         withdrawConfirm(IBAN, 20, pinCode);
                         break;
-                    //If B is pressed withdraw €50
+                    //Als B is ingedrukt withdraw €50
                     case "B":
                         withdrawConfirm(IBAN, 50, pinCode);
                         break;
-                    //If C is pressed withdraw €100
+                    //Als C is ingedrukt withdraw €100
                     case "C":
                         withdrawConfirm(IBAN, 100, pinCode);
                         break;
-                    //If D is pressed go to withdraw custom amount screen
+                    //Als D is ingedrukt ga naar withdraw custom amount scherm
                     case "D":
                         withdrawCustomAmount(IBAN, pinCode);
                         break;
-                    //If * is pressed go back to menu
+                    //Als * is ingedrukt ga terug naar menu
                     case "*":
                         menu(IBAN, pinCode);
                         break;
@@ -246,20 +263,23 @@ class ATM extends Thread {
     }
 
     private void withdrawConfirm(String IBAN, int amount, int pinCode) {
+        /*
+        Hierin wordt een extra paneel weergegeven om een bevestiging van het op te nemen bedrag te tonen.
+        */
         agui.displayPanel("withdrawConfirmPanel");
         agui.withdrawConfirmPanel.add(agui.logoIcon);
         agui.withdrawConfirmMessage.setText("Are you sure you want to withdraw €" + amount + "?");
         while (true) {
             Thread.yield();
-            //Get keypad input
+            //Keypad input wordt gelezen
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                    //If D is pressed withdraw the amount
+                    //Als D is ingedrukt neem het bedrag op
                     case "D":
                         withdraw(IBAN, amount, pinCode);
                         break;
-                    //If * is pressed don't withdraw the amount and go back to menu
+                    //Als * is ingedrukt niet het bedrag opnemen en terug naar het menu gaan
                     case "*":
                         menu(IBAN, pinCode);
                         break;
@@ -269,6 +289,9 @@ class ATM extends Thread {
     }
 
     private void withdrawCustomAmount(String IBAN, int pinCode) {
+        /*
+        Hierin wordt een scherm weergegeven waarin de gebruiker handmatig een bedrag kan invoeren.
+        */
         agui.displayPanel("withdrawPanel");
         agui.withdrawPanel.add(agui.logoIcon);
         agui.withdrawAmountCustom.setText("");
@@ -276,6 +299,7 @@ class ATM extends Thread {
         pinAmount = null;
         while (true) {
             keypadInput = keypad.getInput();
+            //Keypad input wordt gelezen en aan de hand hiervan wordt een functie aangeroepen
             if (keypadInput != null) {
                 if (!keypadInput.equals("A") && !keypadInput.equals("B") && !keypadInput.equals("C") && !keypadInput.equals("D") && !keypadInput.equals("*") && !keypadInput.equals("#")) {
                     if (pinAmount == null) {
@@ -299,25 +323,29 @@ class ATM extends Thread {
     }
 
     private void withdraw(String IBAN, int amount, int pinCode) {
-        // Check of er genoeg saldo is
+        /*
+        Hierin worden een aantal checks en berekeningen gemaatk en aan de hand van de uitkomst daarvan
+        wordt een paneel weergeven.
+        */
         if (!checkSufficientBalance(IBAN, amount, pinCode)) {
+            //Er is onvoldoende saldo aanwezig
             agui.displayPanel("withdrawInsufOptionsPanel");
             agui.withdrawInsufOptionsPanel.add(agui.logoIcon);
             while (true) {
-                //niet genoeg saldo opties
+                //niet genoeg saldo opties worden weergeven
                 Thread.yield();
                 keypadInput = keypad.getInput();
                 if (keypadInput != null) {
                     switch (keypadInput) {
-                        //If B is pressed check balance
+                        //Als B is ingedrukt check saldo
                         case "B":
                             balance(IBAN, pinCode);
                             break;
-                        //If C is pressed enter custom amount
+                        //Als C is ingedrukt ga naar withdraw custom amount scherm
                         case "C":
                             withdrawCustomAmount(IBAN, pinCode);
                             break;
-                        //If * is abort transaction
+                        //Als * is ingedrukt annuleer de transactie
                         case "*":
                             thanks();
                             break;
@@ -346,6 +374,7 @@ class ATM extends Thread {
         readBillsAvailable();
         System.out.println("receivedBillsAvailable : " + availableBills);
 
+        //Check welke biljetten aanwezig zijn
         availableTens = Integer.parseInt(availableBills.substring(1, 3));
         System.out.println("Available tens: " + availableTens);
         availableFifties = Integer.parseInt(availableBills.substring(3, 5));
@@ -374,11 +403,11 @@ class ATM extends Thread {
                 keypadInput = keypad.getInput();
                 if (keypadInput != null) {
                     switch (keypadInput) {
-                        //If C is pressed enter custom amount
+                        //Als C is ingedrukt ga naar withdraw custom amount scherm
                         case "C":
                             withdrawCustomAmount(IBAN, pinCode);
                             break;
-                        //If * is abort transaction
+                        //Als * is ingedrukt annuleer de transactie
                         case "*":
                             thanks();
                             break;
@@ -392,20 +421,24 @@ class ATM extends Thread {
     }
 
     private void invalidAmount(String IBAN, int amount, int pinCode) {
+        /*
+        Deze functie wordt gebruikt wanneer er een ongeldig bedrag ingevoerd was.
+        Aan de hand van het bedrag worden verschillende opties weergeven.
+         */
         agui.displayPanel("withdrawProcessScreen");
         agui.withdrawProcessScreen.add(agui.logoIcon);
 
         if (amount == 0) {
+            //Het bedrag 0 was ingevoerd en er is nu de optie om terug te gaan naar het withdraw custom amount scherm
             agui.displayPanel("withdrawProcessScreen");
             agui.withdrawProcessScreen.add(agui.logoIcon);
             agui.withdrawStatusMessage.setText("€" + amount + " not a valid amount.");
 
             while (true) {
-                //niet genoeg saldo opties
                 Thread.yield();
                 keypadInput = keypad.getInput();
                 if (keypadInput != null) {
-                    //If * is pressed go back to withdraw menu
+                    //Als * is ingedrukt ga terug naar het withdraw custom amount scherm
                     if ("*".equals(keypadInput)) {
                         withdrawCustomAmount(IBAN, pinCode);
                     }
@@ -416,21 +449,21 @@ class ATM extends Thread {
         } else {
             amountRounded = amount - (amount - (bilAmountFifty * 50) - (billAmountTen * 10));
         }
+        //Een wel-pinbaar bedrag wordt berekend en de optie om dit bedrag op te nemen wordt weergeven
         agui.displayPanel("withdrawSuggestionPanel");
         agui.withdrawSuggestionPanel.add(agui.logoIcon);
         agui.withdrawError.setText("€" + amount + " not a valid amount.");
         agui.withdrawSuggestionText2.setText("€" + amountRounded + " instead?");
-        //ander bedrag suggestie opties scherm
         while (true) {
             Thread.yield();
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                    //If * is pressed go back to withdraw men
+                    //Als * is ingedrukt ga terug naar het withdraw menu
                     case "*":
                         withdrawMenu(IBAN, pinCode);
                         break;
-                    //If D is pressed withdraw the suggested amount
+                    //Als D is ingedrukt neem het nieuwe (afgeronde) bedrag op
                     case "D":
                         withdraw(IBAN, amountRounded, pinCode);
                         break;
@@ -440,6 +473,9 @@ class ATM extends Thread {
     }
 
     private void exceedsLimit(String IBAN, int amount, int pinCode) {
+        /*
+        Hierin wordt een scherm met opties weergegeven wanneer het ingevoerde bedrag boven het limiet is
+         */
         agui.displayPanel("withdrawLimitPanel");
         agui.withdrawLimitPanel.add(agui.logoIcon);
         agui.withdrawLimitText.setText("€" + amount + " exceeds limit.");
@@ -449,11 +485,11 @@ class ATM extends Thread {
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                    //If * is pressed go back to withdraw men
+                    //Als * is ingedrukt ga terug naar het withdraw menu
                     case "*":
                         withdrawMenu(IBAN, pinCode);
                         break;
-                    //If D is pressed withdraw the suggested amount
+                    //Als D is ingedrukt neem het nieuwe (afgeronde) bedrag op
                     case "D":
                         withdraw(IBAN, 300, pinCode);
                         break;
@@ -463,6 +499,10 @@ class ATM extends Thread {
     }
 
     private void printing(String IBAN, int amount, int pinCode) {
+        /*
+        Hierin wordt via de API het saldo aangepast aan de hand van het te pinnen bedrag.
+        Er wordt na een request te sturen naar de API gekeken wat de API terug heeft gestuurd.
+         */
         agui.displayPanel("printingPanel");
         agui.printingPanel.add(agui.logoIcon);
         agui.printingMoney.setText("");
@@ -526,6 +566,9 @@ class ATM extends Thread {
     }
 
     private void receipt(String IBAN, int amount) {
+        /*
+        Er wordt hier een scherm weergeven met de optie voor het printen van een bonnetje.
+         */
         agui.displayPanel("receiptPanel");
         agui.receiptPanel.add(agui.logoIcon);
         while (true) {
@@ -534,13 +577,13 @@ class ATM extends Thread {
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                    //If D is pressed print out a receipt and dispense the money
+                    //Als D is ingedrukt print het bonnetje
                     case "D":
                         sCon.giveOutput(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mmdd/MM/yyyy")) +
                                 IBAN.substring(12, 16) + "1" + "000" + amount);
                         thanks();
                         break;
-                    //If * is pressed don't print out a receipt and dispense the money
+                    //Als * is ingedrukt print geen bonnetje
                     case "*":
                         sCon.giveOutput("0");
                         thanks();
@@ -551,6 +594,10 @@ class ATM extends Thread {
     }
 
     private void thanks() {
+        /*
+        Fucntie voor het weergeven van een scherm met een bedank-bericht.
+        Na 5 seconden wordt er weer terug gegaan naar het scanCard-scherm.
+         */
         agui.displayPanel("thanksPanel");
         agui.thanksPanel.add(agui.logoIcon);
         try {
@@ -562,6 +609,10 @@ class ATM extends Thread {
     }
 
     private void blockedCard() {
+        /*
+        Hierin wordt een scherm weergeven met een bericht dat het pasje is geblokkeerd.
+        Na 10 seconden wordt er weer terug gegaan naar het scanCard-scherm.
+         */
         agui.displayPanel("blockedCardPanel");
         agui.blockedCardPanel.add(agui.logoIcon);
         try {
@@ -573,6 +624,9 @@ class ATM extends Thread {
     }
 
     private void debtError(String IBAN, int pinCode) {
+        /*
+        Er wordt met deze functie een scherm weergeven met opties voor wanneer de gebruiker in het rood staat.
+         */
         agui.displayPanel("debtErrorPanel");
         agui.debtErrorPanel.add(agui.logoIcon);
         while (true) {
@@ -581,11 +635,11 @@ class ATM extends Thread {
             keypadInput = keypad.getInput();
             if (keypadInput != null) {
                 switch (keypadInput) {
-                    //If B is pressed check balance
+                    //Als B is ingedrukt check saldo
                     case "B":
                         balance(IBAN, pinCode);
                         break;
-                    //If * is pressed abort transaction
+                    //Als * is ingedrukt annuleer de transactie
                     case "*":
                         thanks();
                         break;
@@ -595,6 +649,9 @@ class ATM extends Thread {
     }
 
     private void readBillsAvailable() {
+        /*
+        Hierin wordt met seriële communicatie gecontroleerd hoeveel biljetten er nog aanwezig zijn.
+         */
         while (true) {
             Thread.yield();
             if (sCon.getInput() != null) {
