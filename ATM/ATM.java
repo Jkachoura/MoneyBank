@@ -36,12 +36,6 @@ class ATM extends Thread {
 
     public void run() {
         scanCard();
-//        enterPincode("GL03MNBK12345670");
-//        withdrawConfirm("GL03MNBK12345678", 70);
-//        receipt("GL03MNBK12345678", 20);
-//        balance("GL03MNBK12345678", 5678);
-//        getPincodeDatabase("GL03MNBK12345678");
-//        printing("GL03MNBK12345678", 100, 5678);
     }
 
     private void scanCard() {
@@ -622,16 +616,8 @@ class ATM extends Thread {
     }
 
     // --------------------------------------------------------------------------------------------------------
-    // DATABASE SQL METHODS
+    // API METHODS
 
-
-//    private void blockCard(String IBAN) {
-//        try {
-//            Post_JSON.blockCard(IBAN);
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
-//    }
 
     private String editBalance(String IBAN, int amount, int pinCode) {
         try {
@@ -641,17 +627,6 @@ class ATM extends Thread {
         }
         return null;
     }
-
-//    private String getPincodeDatabase(String IBAN) {
-//        try {
-//            String pinCode = null;
-//            pincode = Post_JSON.pinCheck(IBAN);
-//            return pincode;
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
-//        return null;
-//    }
 
     private String checkBalance(String IBAN, int pinCode) {
         try {
@@ -668,17 +643,6 @@ class ATM extends Thread {
         }
         return null;
     }
-
-//    private Boolean checkCardBlockStatus(String IBAN) {
-//        String blockStatus = null;
-//        try {
-//            blockStatus = Post_JSON.checkBlockStatus(IBAN);
-//            return blockStatus.equals("1");
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
-//        return null;
-//    }
 
     private boolean checkIfDebt(String IBAN, int pinCode) {
         if (Integer.parseInt(checkBalance(IBAN, pinCode)) < 0) {
